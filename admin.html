@@ -1080,7 +1080,7 @@ async function ghPublish(htmlContent, statusElId){
   try{
     // 1. Pega o SHA do commit mais recente da branch main
     setStatus('🔄 Verificando repositório...');
-    const refRes=await fetch(`https://api.github.com/repos/${repo}/git/ref/heads/main`,{headers});
+    const refRes=await fetch(`https://api.github.com/repos/${repo}/git/ref/heads/master`,{headers});
     if(!refRes.ok){setStatus('❌ Erro ao acessar repositório. Verifique o token e o nome do repo.','#fca5a5');return;}
     const refData=await refRes.json();
     const latestCommitSha=refData.object.sha;
@@ -1118,7 +1118,7 @@ async function ghPublish(htmlContent, statusElId){
     const newCommitData=await newCommitRes.json();
 
     // 6. Atualiza a referência da branch
-    const updateRefRes=await fetch(`https://api.github.com/repos/${repo}/git/refs/heads/main`,{
+    const updateRefRes=await fetch(`https://api.github.com/repos/${repo}/git/refs/heads/master`,{
       method:'PATCH',headers,
       body:JSON.stringify({sha:newCommitData.sha})
     });
