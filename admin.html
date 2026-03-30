@@ -1076,27 +1076,59 @@ async function ghPublish(htmlContent, statusElId){
   }
   if(!token){setStatus('❌ Insira o GitHub Personal Access Token acima.','#fca5a5');return;}
   if(!repo){setStatus('❌ Insira o repositório (ex: usuario/repo).','#fca5a5');return;}
-  setStatus('🔄 Verificando repositório...');
+  const headers={'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
   try{
-    // Get current SHA of index.html (needed to update existing file)
-    const getRes=await fetch(`https://api.github.com/repos/${repo}/contents/index.html`,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
-    let sha='';
-    if(getRes.ok){const d=await getRes.json();sha=d.sha||'';}
-    else if(getRes.status!==404){setStatus('❌ Erro ao acessar repositório. Verifique o token e o nome do repo.','#fca5a5');return;}
-    setStatus('🔄 Publicando index.html...');
-    const content=btoa(unescape(encodeURIComponent(htmlContent)));
-    const body={message:'Atualiza index.html via painel admin UNITEKE',content};
-    if(sha)body.sha=sha;
-    const putRes=await fetch(`https://api.github.com/repos/${repo}/contents/index.html`,{method:'PUT',headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(putRes.ok){
+    // 1. Pega o SHA do commit mais recente da branch main
+    setStatus('🔄 Verificando repositório...');
+    const refRes=await fetch(`https://api.github.com/repos/${repo}/git/ref/heads/main`,{headers});
+    if(!refRes.ok){setStatus('❌ Erro ao acessar repositório. Verifique o token e o nome do repo.','#fca5a5');return;}
+    const refData=await refRes.json();
+    const latestCommitSha=refData.object.sha;
+
+    // 2. Pega a tree do commit atual
+    setStatus('🔄 Lendo estrutura do repositório...');
+    const commitRes=await fetch(`https://api.github.com/repos/${repo}/git/commits/${latestCommitSha}`,{headers});
+    const commitData=await commitRes.json();
+    const treeSha=commitData.tree.sha;
+
+    // 3. Cria um blob com o conteúdo (suporta arquivos grandes)
+    setStatus('🔄 Enviando arquivo (pode demorar alguns segundos)...');
+    const blobRes=await fetch(`https://api.github.com/repos/${repo}/git/blobs`,{
+      method:'POST',headers,
+      body:JSON.stringify({content:htmlContent,encoding:'utf-8'})
+    });
+    if(!blobRes.ok){setStatus('❌ Erro ao criar blob. Verifique permissões do token.','#fca5a5');return;}
+    const blobData=await blobRes.json();
+
+    // 4. Cria nova tree com o index.html atualizado
+    setStatus('🔄 Criando nova versão...');
+    const newTreeRes=await fetch(`https://api.github.com/repos/${repo}/git/trees`,{
+      method:'POST',headers,
+      body:JSON.stringify({base_tree:treeSha,tree:[{path:'index.html',mode:'100644',type:'blob',sha:blobData.sha}]})
+    });
+    if(!newTreeRes.ok){setStatus('❌ Erro ao criar tree.','#fca5a5');return;}
+    const newTreeData=await newTreeRes.json();
+
+    // 5. Cria novo commit
+    const newCommitRes=await fetch(`https://api.github.com/repos/${repo}/git/commits`,{
+      method:'POST',headers,
+      body:JSON.stringify({message:'Atualiza index.html via painel admin UNITEKE',tree:newTreeData.sha,parents:[latestCommitSha]})
+    });
+    if(!newCommitRes.ok){setStatus('❌ Erro ao criar commit.','#fca5a5');return;}
+    const newCommitData=await newCommitRes.json();
+
+    // 6. Atualiza a referência da branch
+    const updateRefRes=await fetch(`https://api.github.com/repos/${repo}/git/refs/heads/main`,{
+      method:'PATCH',headers,
+      body:JSON.stringify({sha:newCommitData.sha})
+    });
+    if(updateRefRes.ok){
       setStatus('✅ Publicado com sucesso! O site será atualizado em 1–2 minutos.<br><small style="opacity:.7">github.com/'+repo+' → index.html</small>','#22c55e');
     } else {
-      const err=await putRes.json();
-      setStatus('❌ Erro: '+(err.message||putRes.status)+'. Verifique se o token tem permissão "repo".','#fca5a5');
+      setStatus('❌ Erro ao atualizar branch. Verifique permissões do token.','#fca5a5');
     }
   }catch(e){setStatus('❌ Erro de conexão: '+e.message,'#fca5a5');}
 }
-
 async function publishGenerated(){
   const html=exportSite();
   await ghPublish(html,'ghStatus');
