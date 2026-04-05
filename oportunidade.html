@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oportunidade Exclusiva — Universidade Kerigma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#10284E;--navy-dark:#0b1d38;--navy-mid:#1a3a6b;
+  --gold:#F5C400;--gold-dark:#d4a800;--gold-hover:#ffd83d;
+  --bg-white:#FFFFFF;--bg-gray:#F4F5F7;
+  --text-dark:#10284E;--text-mid:#374151;--text-soft:#6b6b6b;--border:#E2E8F0;
+  --font-title:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',Arial,sans-serif;
+  --font-serif:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,sans-serif;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.07);--shadow-md:0 4px 20px rgba(0,0,0,.10);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.15);--shadow-gold:0 4px 24px rgba(245,196,0,.4);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);color:var(--text-dark);background:var(--bg-white);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.btn-main{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--navy);font-family:var(--font-title);font-weight:800;font-size:.97rem;padding:16px 32px;border-radius:8px;border:none;cursor:pointer;letter-spacing:.03em;text-decoration:none;transition:all .25s ease;box-shadow:var(--shadow-gold);white-space:nowrap;}
+.btn-main:hover{background:var(--gold-hover);transform:translateY(-2px);box-shadow:0 8px 32px rgba(245,196,0,.5);}
+.btn-main.lg{font-size:1.05rem;padding:20px 40px;}
+/* TICKER */
+.ticker-wrap{background:var(--gold);overflow:hidden;padding:10px 0;}
+.ticker{display:flex;white-space:nowrap;animation:tick 32s linear infinite;}
+.ticker:hover{animation-play-state:paused;}
+.ticker span{font-family:var(--font-body);font-size:.73rem;font-weight:700;color:var(--navy-dark);text-transform:uppercase;letter-spacing:2px;padding:0 36px;flex-shrink:0;}
+.ticker span::before{content:'✦';margin-right:14px;opacity:.65;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 72px;position:relative;overflow:hidden;background-image:url('https://drive.google.com/thumbnail?id=1Es8iizXm1wA1mjuVEaAu0kHnbCOR7juQ&sz=w2000');background-size:cover;background-position:center;}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,40,.72) 0%,rgba(7,18,40,.85) 60%,rgba(7,18,40,.94) 100%);z-index:0;}
+@media(max-width:768px){.hero{background-image:url('https://drive.google.com/thumbnail?id=1gu7g8fxhYPNtm-M7SkMLXx8wNacDZxax&sz=w2000');padding:60px 20px 56px;}}
+.hero-content{position:relative;z-index:1;max-width:820px;animation:fadeUp .9s ease-out;}
+.hero-badges{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:24px;}
+.badge-ok{display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,.18);border:1px solid rgba(37,211,102,.45);color:#4ade80;font-size:.8rem;font-weight:600;padding:8px 18px;border-radius:50px;letter-spacing:.04em;}
+.badge-opp{display:inline-flex;align-items:center;gap:8px;background:rgba(245,196,0,.14);border:1px solid rgba(245,196,0,.45);color:var(--gold);font-size:.76rem;font-weight:700;padding:8px 18px;border-radius:50px;letter-spacing:.13em;text-transform:uppercase;}
+.hero h1{font-family:var(--font-title);font-size:clamp(1.9rem,4.8vw,3.2rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:28px;}
+.hero h1 em{font-style:normal;color:var(--gold);}
+.hero-video{max-width:700px;margin:0 auto 28px;position:relative;background:rgba(7,18,40,.6);border-radius:12px;overflow:hidden;border:1px solid rgba(245,196,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.5);}
+.hero-video-ratio{position:relative;padding-bottom:56.25%;}
+.hero-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.hero-video-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;color:rgba(255,255,255,.75);font-size:.88rem;}
+.play-btn{width:64px;height:64px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;}
+.hero-video-ph:hover .play-btn{transform:scale(1.08);box-shadow:0 0 28px rgba(245,196,0,.6);}
+.hero-guarantee{margin-top:12px;font-size:.78rem;color:rgba(255,255,255,.5);}
+/* STATS */
+.stats-section{background:var(--navy);padding:52px 24px;}
+.stats-grid{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;}
+.stat-item{flex:1 1 160px;max-width:210px;text-align:center;padding:20px 16px;border-right:1px solid rgba(255,255,255,.1);}
+.stat-item:last-child{border-right:none;}
+@media(max-width:600px){.stat-item{flex:1 1 120px;border-right:none;border-bottom:1px solid rgba(255,255,255,.08);padding:16px 12px;}.stat-item:last-child{border-bottom:none;}}
+.stat-num{font-family:var(--font-title);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;color:var(--gold);line-height:1;display:block;margin-bottom:6px;}
+.stat-lbl{font-size:clamp(.66rem,.85vw,.76rem);color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;line-height:1.4;}
+/* SECTION */
+.section{padding:72px 24px;}.section.bg-white{background:var(--bg-white);}.section.bg-gray{background:var(--bg-gray);}.section.bg-navy{background:var(--navy);}
+.section-inner{max-width:960px;margin:0 auto;}
+.s-tag{display:inline-block;background:rgba(245,196,0,.1);border:1px solid rgba(245,196,0,.3);color:var(--gold-dark);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:5px 13px;border-radius:4px;margin-bottom:14px;}
+.section.bg-navy .s-tag{color:var(--gold);}
+.s-title{font-family:var(--font-title);font-size:clamp(1.55rem,3.4vw,2.3rem);font-weight:700;color:var(--navy);line-height:1.22;margin-bottom:12px;}
+.section.bg-navy .s-title{color:#fff;}
+.s-sub{font-size:1rem;color:var(--text-soft);max-width:600px;margin-bottom:36px;line-height:1.75;}
+.section.bg-navy .s-sub{color:rgba(255,255,255,.68);}
+.divider{width:48px;height:3px;background:var(--gold);border-radius:2px;margin:14px 0 32px;}
+.divider.center{margin:14px auto 32px;}
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;}
+@media(max-width:768px){.two-col{grid-template-columns:1fr;}}
+.img-block{border-radius:12px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:4/3;background:var(--bg-gray);}
+.img-block img{width:100%;height:100%;object-fit:cover;display:block;}
+.img-ph{width:100%;height:100%;min-height:260px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8edf5,#d0d8e8);color:var(--text-soft);font-size:.85rem;text-align:center;padding:24px;flex-direction:column;gap:8px;}
+/* BENEFITS */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+.ben-card{background:var(--bg-white);border:1px solid var(--border);border-radius:10px;padding:22px;transition:box-shadow .2s,transform .2s;}
+.ben-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.ben-icon{width:42px;height:42px;background:rgba(245,196,0,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:12px;}
+.ben-card h4{font-family:var(--font-title);font-size:.97rem;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.ben-card p{font-size:.87rem;color:var(--text-soft);line-height:1.6;}
+/* LEVELS */
+.levels-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+@media(max-width:900px){.levels-grid{grid-template-columns:1fr;}}
+.level-card{background:var(--bg-white);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;}
+.level-head{background:var(--navy);padding:24px 22px 20px;}
+.level-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold);margin-bottom:6px;}
+.level-head h3{font-family:var(--font-title);font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:14px;}
+.level-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.level-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:.7rem;font-weight:500;padding:4px 10px;border-radius:4px;}
+.level-body{padding:20px 22px;flex:1;}
+.level-body-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold-dark);margin-bottom:12px;}
+.subject-list{list-style:none;}
+.subject-list li{font-size:.84rem;color:var(--text-mid);padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:8px;}
+.subject-list li:last-child{border-bottom:none;}
+.subject-num{font-size:.68rem;font-weight:700;color:var(--gold-dark);flex-shrink:0;}
+/* MEC */
+.mec-block{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:16px;padding:52px 44px;text-align:center;position:relative;overflow:hidden;}
+.mec-block::before{content:'';position:absolute;top:-60px;right:-60px;width:250px;height:250px;background:rgba(245,196,0,.05);border-radius:50%;}
+.mec-badge{display:inline-block;background:var(--gold);color:var(--navy);font-family:var(--font-title);font-weight:900;font-size:.68rem;text-transform:uppercase;letter-spacing:2.5px;padding:6px 16px;border-radius:4px;margin-bottom:18px;}
+.mec-block h3{font-family:var(--font-title);font-size:clamp(1.3rem,2.8vw,1.9rem);font-weight:700;color:#fff;line-height:1.25;margin-bottom:12px;}
+.mec-block p{color:rgba(255,255,255,.72);font-size:.97rem;max-width:580px;margin:0 auto 16px;line-height:1.75;}
+.mec-note{display:inline-block;background:rgba(245,196,0,.12);border:1px solid rgba(245,196,0,.3);color:var(--gold);font-size:.8rem;font-weight:500;padding:10px 20px;border-radius:8px;margin-bottom:24px;line-height:1.6;}
+.mec-points{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;}
+.mec-pt{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:.8rem;font-weight:500;padding:7px 14px;border-radius:6px;display:flex;align-items:center;gap:7px;}
+.mec-pt span{color:var(--gold);}
+/* PROFESSOR */
+.prof-wrap{display:grid;grid-template-columns:280px 1fr;gap:52px;align-items:center;}
+@media(max-width:768px){.prof-wrap{grid-template-columns:1fr;text-align:center;}}
+.prof-img{border-radius:12px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:3/4;background:var(--bg-gray);}
+.prof-img img{width:100%;height:100%;object-fit:cover;object-position:top;}
+.prof-img-ph{width:100%;min-height:320px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8edf5,#d0d8e8);color:var(--text-soft);font-size:.85rem;text-align:center;padding:24px;flex-direction:column;gap:8px;}
+.prof-name{font-family:var(--font-title);font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;color:var(--navy);margin-bottom:4px;}
+.prof-role{color:var(--gold-dark);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.prof-bio{font-size:.96rem;color:var(--text-soft);line-height:1.8;margin-bottom:24px;}
+.prof-stats{display:flex;gap:28px;flex-wrap:wrap;}
+@media(max-width:768px){.prof-stats{justify-content:center;}}
+.prof-stat strong{display:block;font-family:var(--font-title);font-size:1.5rem;font-weight:800;color:var(--navy);}
+.prof-stat span{font-size:.76rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;}
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;}
+.testi-card{background:var(--bg-white);border:1px solid var(--border);border-radius:10px;padding:24px;}
+.testi-stars{color:var(--gold-dark);font-size:.9rem;margin-bottom:10px;}
+.testi-text{font-family:var(--font-serif);font-style:italic;font-size:.96rem;color:var(--text-mid);line-height:1.7;margin-bottom:16px;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-av{width:40px;height:40px;border-radius:50%;background:var(--bg-gray);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.testi-name{font-size:.86rem;font-weight:600;color:var(--navy);}
+.testi-loc{font-size:.77rem;color:var(--text-soft);}
+/* OFFER */
+.offer-section{background:var(--navy);padding:80px 24px;position:relative;overflow:hidden;}
+.offer-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(245,196,0,.05),transparent 65%);pointer-events:none;}
+.offer-inner{max-width:700px;margin:0 auto;text-align:center;position:relative;}
+.offer-label{font-family:var(--font-body);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--gold);margin-bottom:12px;}
+.offer-title{font-family:var(--font-serif);font-size:clamp(2rem,4.5vw,3rem);font-weight:400;color:#fff;line-height:1.2;margin-bottom:32px;}
+.offer-title em{font-style:italic;color:var(--gold);}
+.offer-card{max-width:520px;margin:0 auto 32px;background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.02) 100%);border:1px solid rgba(245,196,0,.25);border-radius:20px;overflow:hidden;box-shadow:0 16px 64px rgba(0,0,0,.3);}
+.offer-card-header{background:linear-gradient(135deg,var(--gold),var(--gold-dark));padding:14px 24px;text-align:center;}
+.offer-card-header span{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--navy);}
+.offer-card-body{padding:36px 32px 40px;}
+@media(max-width:480px){.offer-card-body{padding:28px 20px 32px;}}
+.offer-card-body h3{font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:#fff;margin-bottom:6px;line-height:1.3;}
+.offer-card-body h3 em{font-style:italic;color:var(--gold);}
+.offer-card-desc{font-size:.9rem;color:rgba(255,255,255,.55);margin-bottom:28px;}
+.offer-features{list-style:none;text-align:left;margin-bottom:32px;}
+.offer-features li{font-size:.9rem;color:rgba(255,255,255,.85);padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:12px;line-height:1.5;}
+.offer-features li:last-child{border-bottom:none;}
+.offer-features li svg{flex-shrink:0;margin-top:3px;}
+.offer-price-block{background:rgba(245,196,0,.06);border:1px solid rgba(245,196,0,.15);border-radius:14px;padding:28px 20px;margin-bottom:28px;text-align:center;}
+.offer-price-old{font-size:.88rem;color:rgba(255,255,255,.4);margin-bottom:10px;}
+.offer-price-old s{color:#ef4444;text-decoration:line-through;}
+.offer-price-free{color:#4ade80;font-weight:700;}
+.offer-price-main{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:4px;}
+.offer-price-curr{font-family:var(--font-title);font-size:1.4rem;font-weight:800;color:var(--gold);align-self:flex-start;margin-top:10px;}
+.offer-price-val{font-family:var(--font-title);font-size:4.2rem;font-weight:900;color:#fff;line-height:1;}
+.offer-price-per{font-size:1rem;color:rgba(255,255,255,.5);font-weight:400;align-self:flex-end;margin-bottom:8px;}
+.offer-price-note{font-size:.78rem;color:rgba(255,255,255,.35);margin-top:6px;}
+.offer-pay-methods{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:20px;flex-wrap:wrap;}
+.offer-pay-methods span{font-size:.68rem;color:rgba(255,255,255,.3);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+.offer-pay-div{width:1px;height:12px;background:rgba(255,255,255,.1);}
+.offer-guarantee{margin-top:14px;font-size:.78rem;color:rgba(255,255,255,.35);}
+.offer-guarantee{margin-top:14px;font-size:.78rem;color:rgba(255,255,255,.35);}
+/* STEPS */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr) 1fr;gap:20px;align-items:stretch;}
+@media(max-width:900px){.steps-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.steps-grid{grid-template-columns:1fr;}}
+.step-card{background:var(--bg-white);border:1px solid var(--border);border-radius:12px;padding:32px 28px;transition:box-shadow .2s,transform .2s;}
+.step-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.step-card.cta-card{background:var(--navy);border-color:var(--navy);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:40px 28px;}
+.step-num{font-family:var(--font-title);font-size:2rem;font-weight:800;color:var(--gold);line-height:1;margin-bottom:12px;}
+.step-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-soft);margin-bottom:8px;}
+.step-card.cta-card .step-label{color:rgba(255,255,255,.55);}
+.step-title{font-family:var(--font-title);font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:12px;line-height:1.3;}
+.step-card.cta-card .step-title{color:#fff;font-size:1.2rem;margin-bottom:16px;line-height:1.3;}
+.step-desc{font-size:.88rem;color:var(--text-soft);line-height:1.75;}
+/* PLATFORM */
+.campus-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+@media(max-width:768px){.campus-layout{grid-template-columns:1fr;}}
+.campus-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:220px 180px;gap:10px;}
+.campus-img{border-radius:10px;overflow:hidden;background:var(--bg-gray);background-size:cover;background-position:center;}
+.campus-img.tall{grid-row:span 2;}
+.campus-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.campus-img-ph{width:100%;height:100%;min-height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ef,#c8d4e4);color:var(--text-soft);font-size:.8rem;text-align:center;padding:12px;flex-direction:column;gap:6px;}
+.platform-feature{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.pf-icon{width:40px;height:40px;flex-shrink:0;background:rgba(245,196,0,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.pf-info h4{font-family:var(--font-title);font-size:.97rem;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.pf-info p{font-size:.86rem;color:var(--text-soft);line-height:1.6;}
+/* GRADUATION */
+.graduation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:768px){.graduation-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.graduation-grid{grid-template-columns:1fr;}}
+.grad-photo{border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--bg-gray);}
+.grad-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.grad-photo:hover img{transform:scale(1.04);}
+.grad-photo-ph{width:100%;height:100%;min-height:200px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dce6f4,#c0cfe4);color:var(--text-soft);font-size:.82rem;text-align:center;padding:16px;flex-direction:column;gap:6px;}
+/* FLOATING */
+.floating-cta{position:fixed;bottom:28px;right:28px;z-index:200;opacity:0;transform:translateY(12px);transition:all .3s ease;pointer-events:none;}
+.floating-cta.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+.floating-btn{display:flex;align-items:center;gap:10px;background:var(--gold);color:var(--navy);font-family:var(--font-title);font-weight:800;font-size:.88rem;padding:14px 22px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.25);transition:all .2s;white-space:nowrap;}
+.floating-btn:hover{background:var(--gold-hover);transform:translateY(-2px);}
+@media(max-width:480px){.floating-cta{bottom:16px;right:16px;left:16px;}.floating-btn{width:100%;justify-content:center;}}
+/* FOOTER */
+footer{background:var(--navy-dark);padding:36px 24px;text-align:center;border-top:1px solid rgba(255,255,255,.06);}
+footer p{font-size:.79rem;color:rgba(255,255,255,.35);line-height:1.9;}
+footer strong{color:rgba(255,255,255,.5);}
+/* POPUP */
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(7,18,40,.78);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+.popup-overlay.active{display:flex;}
+.popup-box{background:var(--bg-white);border-radius:14px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;animation:popIn .3s ease-out;}
+@keyframes popIn{from{opacity:0;transform:scale(.93) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.popup-head{background:var(--navy);padding:22px 24px 18px;position:relative;}
+.popup-nivel-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:6px;}
+.popup-head h3{font-family:var(--font-title);font-size:1.3rem;font-weight:700;color:#fff;line-height:1.2;}
+.popup-head p{font-size:.84rem;color:rgba(255,255,255,.6);margin-top:4px;}
+.popup-close{position:absolute;top:14px;right:14px;width:30px;height:30px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:rgba(255,255,255,.7);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.popup-close:hover{background:rgba(255,255,255,.2);}
+.popup-body{padding:24px;}
+.form-group{margin-bottom:15px;}
+.form-group label{display:block;font-size:.76rem;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.form-group input,.form-group select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-body);font-size:.94rem;color:var(--text-dark);background:#fff;transition:border-color .2s,box-shadow .2s;appearance:none;-webkit-appearance:none;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(16,40,78,.08);}
+.form-group input::placeholder{color:#b0b8c8;}
+.sel-wrap{position:relative;}.sel-wrap::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--navy);font-size:.8rem;pointer-events:none;}
+.popup-submit{width:100%;padding:15px;background:var(--gold);color:var(--navy);font-family:var(--font-title);font-weight:800;font-size:1rem;border:none;border-radius:8px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
+.popup-submit:hover{background:var(--gold-hover);transform:translateY(-1px);box-shadow:var(--shadow-gold);}
+.popup-submit:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+.popup-privacy{text-align:center;font-size:.74rem;color:var(--text-soft);margin-top:11px;display:flex;align-items:center;justify-content:center;gap:5px;}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+.text-center{text-align:center;}
+/* WA ICON shorthand */
+.wa-svg{display:inline-block;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Vagas abertas</span><span>Matrícula por apenas R$ 50,00</span><span>Mensalidade R$ 100/mês</span><span>Certificado de Extensão Universitária — Oportunidade MEC com UNIFATEC</span><span>3 níveis · 44 matérias</span><span>3.700+ alunos formados</span><span>Presença em 12 países</span><span>Vagas abertas</span><span>Matrícula por apenas R$ 50,00</span><span>Mensalidade R$ 100/mês</span><span>Certificado de Extensão Universitária — Oportunidade MEC com UNIFATEC</span><span>3 níveis · 44 matérias</span><span>3.700+ alunos formados</span><span>Presença em 12 países</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badges">
+      <div class="badge-ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Compra confirmada com sucesso!</div>
+      <div class="badge-opp">✦ &nbsp;Oportunidade exclusiva para você</div>
+    </div>
+    <h1>Você deu o primeiro passo.<br><em>Agora vá até o </em><em style="font-family:var(--font-serif);font-style:italic;">fim.</em></h1>
+    <!-- Vídeo do professor imediatamente abaixo do título -->
+    <div class="hero-video">
+      <div class="hero-video-ratio">
+        <iframe id="hero-iframe" src="about:blank" data-src="https://www.youtube.com/embed/VIDEO_ID_AQUI?rel=0&modestbranding=1&autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="hero-video-ph" id="hero-ph" onclick="ativarVideo()">
+          <div class="play-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#10284E"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <span>Assista a mensagem do Prof. Nehemias</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-main lg" onclick="abrirPopup()">
+      <svg class="wa-svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Me matricular por apenas R$ 50,00
+    </button>
+    <p class="hero-guarantee">🔒 Matrícula simples e segura · Início Imediato · Pague via Pix ou Cartão de Crédito</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item reveal"><span class="stat-num">3.700+</span><span class="stat-lbl">Alunos formados</span></div>
+    <div class="stat-item reveal"><span class="stat-num">12</span><span class="stat-lbl">Países</span></div>
+    <div class="stat-item reveal"><span class="stat-num">44</span><span class="stat-lbl">Matérias</span></div>
+    <div class="stat-item reveal"><span class="stat-num">80+</span><span class="stat-lbl">Obras publicadas</span></div>
+    <div class="stat-item reveal"><span class="stat-num">MEC</span><span class="stat-lbl">Extensão universitária disponível</span></div>
+  </div>
+</div>
+
+<!-- SOBRE A FORMAÇÃO -->
+<section class="section bg-white">
+  <div class="section-inner">
+    <div class="two-col">
+      <div class="img-block reveal">
+        <img src="https://drive.google.com/thumbnail?id=IMAGE_ID_AQUI&sz=w800" alt="Universidade Kerigma" onerror="this.parentElement.innerHTML='<div class=\'img-ph\'>📸 Adicione via Google Drive<br><small>Troque IMAGE_ID_AQUI pelo ID do arquivo</small></div>'">
+      </div>
+      <div class="reveal">
+        <div class="s-tag">A sua formação</div>
+        <h2 class="s-title">Uma formação teológica séria,<br>do básico ao <em style="font-family:var(--font-serif);font-style:italic;color:var(--gold);">bacharelado</em></h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-soft);font-size:.97rem;line-height:1.8;margin-bottom:16px;">A Formação Teológica da Universidade Kerigma é estruturada em 3 níveis, com 44 matérias ministradas pelo Prof. Dr. Nehemias Santos — pastor, escritor e autor de mais de 80 obras teológicas.</p>
+        <p style="color:var(--text-soft);font-size:.97rem;line-height:1.8;">Ao concluir cada nível, você recebe o <strong style="color:var(--navy)">certificado de conclusão emitido pela Universidade Kerigma</strong>. E ao final do curso completo, você tem a <strong style="color:var(--navy)">oportunidade de solicitar, com condição especial, o Certificado de Extensão Universitária reconhecido pelo MEC</strong> (em parceria com a UNIFATEC) — um diferencial exclusivo para quem conclui a formação.</p>
+        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="background:var(--bg-gray);border-radius:8px;padding:12px 16px;font-size:.84rem;">📅 <strong>3 anos</strong><br><span style="color:var(--text-soft)">Duração total</span></div>
+          <div style="background:var(--bg-gray);border-radius:8px;padding:12px 16px;font-size:.84rem;">📚 <strong>44 matérias</strong><br><span style="color:var(--text-soft)">Conteúdo completo</span></div>
+          <div style="background:var(--bg-gray);border-radius:8px;padding:12px 16px;font-size:.84rem;">🎓 <strong>Cert. Kerigma</strong><br><span style="color:var(--text-soft)">Incluso ao concluir</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<section class="section bg-gray">
+  <div class="section-inner">
+    <div class="text-center reveal"><div class="s-tag">Por que entrar agora</div><h2 class="s-title">Tudo que você tem acesso<br>como aluno da <em style="font-family:var(--font-serif);font-style:italic;color:var(--gold);">formação</em></h2><div class="divider center"></div></div>
+    <div class="benefits-grid">
+      <div class="ben-card reveal"><div class="ben-icon">📖</div><h4>44 matérias de teologia bíblica</h4><p>Do básico ao bacharelado, com conteúdo sólido, aplicado e de alta qualidade.</p></div>
+      <div class="ben-card reveal"><div class="ben-icon">🌐</div><h4>100% online e no seu ritmo</h4><p>Assista quando e onde quiser. Sem horários fixos nem provas obrigatórias.</p></div>
+      <div class="ben-card reveal"><div class="ben-icon">👨‍🏫</div><h4>Professor com 80+ obras publicadas</h4><p>O Prof. Dr. Nehemias Santos é pastor, escritor e referência internacional em teologia.</p></div>
+      <div class="ben-card reveal"><div class="ben-icon">🎓</div><h4>Certificado de conclusão Kerigma</h4><p>Ao concluir cada nível, você recebe o certificado emitido pela Universidade Kerigma.</p></div>
+      <div class="ben-card reveal"><div class="ben-icon">🏛️</div><h4>Oportunidade: Certificado MEC</h4><p>Ao final da formação completa, você pode solicitar, com condição especial, o certificado de Extensão Universitária reconhecido pelo MEC (UNIFATEC).</p></div>
+      <div class="ben-card reveal"><div class="ben-icon">🌍</div><h4>Comunidade em 12 países</h4><p>Conecte-se com uma rede global de alunos, líderes e servos da Palavra.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFESSOR -->
+<section class="section bg-white">
+  <div class="section-inner">
+    <div class="prof-wrap">
+      <div class="prof-img reveal">
+        <img src="https://drive.google.com/thumbnail?id=IMAGE_ID_NEHEMIAS&sz=w600" alt="Prof. Dr. Nehemias Santos" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="prof-img-ph" style="display:none;">📸 Foto do Prof. Nehemias<br><small>Adicione via Google Drive</small></div>
+      </div>
+      <div class="reveal">
+        <div class="s-tag">Seu professor</div>
+        <h2 class="prof-name">Prof. Dr. Nehemias <em style="font-family:var(--font-serif);font-style:italic;color:var(--gold);">Santos</em></h2>
+        <p class="prof-role">Pastor · Escritor · Teólogo</p>
+        <p class="prof-bio">Com mais de 80 obras publicadas e alcance em 12 países, o Prof. Dr. Nehemias Santos é um dos mais influentes teólogos brasileiros da atualidade. Pastor de uma congregação com milhares de membros, une sua trajetória pastoral à missão de formar líderes com profundidade bíblica e excelência.</p>
+        <div class="prof-stats">
+          <div class="prof-stat"><strong>80+</strong><span>Obras publicadas</span></div>
+          <div class="prof-stat"><strong>12</strong><span>Países</span></div>
+          <div class="prof-stat"><strong>3.700+</strong><span>Alunos formados</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JORNADA / 3 NÍVEIS -->
+<section class="section bg-gray">
+  <div class="section-inner">
+    <div class="text-center reveal"><div class="s-tag">Sua jornada</div><h2 class="s-title">3 níveis · Do fundamento ao <em style="font-family:var(--font-serif);font-style:italic;color:var(--gold);">bacharelado</em></h2><p class="s-sub" style="margin:10px auto 0;">Escolha por qual nível iniciar. Cada nível tem seu próprio certificado de conclusão Kerigma.</p><div class="divider center"></div></div>
+    <div class="levels-grid">
+      <!-- BÁSICO -->
+      <div class="level-card reveal">
+        <div class="level-head"><div class="level-tag">Nível 1</div><h3>Básico em Teologia</h3><div class="level-pills"><span class="level-pill">⏱ 12 meses</span><span class="level-pill">🖥 EAD</span><span class="level-pill">📚 12 matérias</span></div></div>
+        <div class="level-body"><p class="level-body-title">Matérias do curso</p><ul class="subject-list"><li><span class="subject-num">01</span>Bibliologia</li><li><span class="subject-num">02</span>Teontologia</li><li><span class="subject-num">03</span>Cristologia</li><li><span class="subject-num">04</span>Pneumatologia</li><li><span class="subject-num">05</span>Antropologia</li><li><span class="subject-num">06</span>Hamartiologia</li><li><span class="subject-num">07</span>Soteriologia</li><li><span class="subject-num">08</span>Angelologia</li><li><span class="subject-num">09</span>Heresiologia</li><li><span class="subject-num">10</span>Escatologia</li><li><span class="subject-num">11</span>Eclesiologia</li><li><span class="subject-num">12</span>Missiologia</li></ul></div>
+      </div>
+      <!-- MÉDIO -->
+      <div class="level-card reveal">
+        <div class="level-head" style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));"><div class="level-tag">Nível 2</div><h3>Médio em Teologia</h3><div class="level-pills"><span class="level-pill">⏱ 12 meses</span><span class="level-pill">🏛 Pres. + EAD</span><span class="level-pill">📚 12 matérias</span></div></div>
+        <div class="level-body"><p class="level-body-title">Matérias do curso</p><ul class="subject-list"><li><span class="subject-num">01</span>Intro. Antigo Testamento</li><li><span class="subject-num">02</span>Pentateuco</li><li><span class="subject-num">03</span>Livros Históricos</li><li><span class="subject-num">04</span>Livros Poéticos</li><li><span class="subject-num">05</span>Profetas Menores</li><li><span class="subject-num">06</span>Profetas Maiores</li><li><span class="subject-num">07</span>Intro. Novo Testamento</li><li><span class="subject-num">08</span>Evangelhos</li><li><span class="subject-num">09</span>Atos dos Apóstolos</li><li><span class="subject-num">10</span>Cartas Paulinas</li><li><span class="subject-num">11</span>Cartas Gerais</li><li><span class="subject-num">12</span>Apocalipse</li></ul></div>
+      </div>
+      <!-- BACHAREL -->
+      <div class="level-card reveal">
+        <div class="level-head"><div class="level-tag">Nível 3</div><h3>Bacharel em Teologia</h3><div class="level-pills"><span class="level-pill">⏱ 24 meses</span><span class="level-pill">🖥 EAD</span><span class="level-pill">📚 20 matérias</span></div></div>
+        <div class="level-body"><p class="level-body-title">Matérias do curso</p><ul class="subject-list"><li><span class="subject-num">01</span>História da Igreja</li><li><span class="subject-num">02</span>Reforma Protestante</li><li><span class="subject-num">03</span>Pentecostalismo</li><li><span class="subject-num">04</span>História de Israel</li><li><span class="subject-num">05</span>Geografia Bíblica</li><li><span class="subject-num">06</span>Arqueologia Bíblica</li><li><span class="subject-num">07</span>Evangelismo</li><li><span class="subject-num">08</span>Discipulado</li><li><span class="subject-num">09</span>Apologética</li><li><span class="subject-num">10</span>Adm. Eclesiástica</li><li><span class="subject-num">11</span>Educação Cristã</li><li><span class="subject-num">12</span>Psicologia Pastoral</li><li><span class="subject-num">13</span>Aconselhamento Past.</li><li><span class="subject-num">14</span>Ministério Pastoral</li><li><span class="subject-num">15</span>Ética Cristã</li><li><span class="subject-num">16</span>Homilética</li><li><span class="subject-num">17</span>Hermenêutica</li><li><span class="subject-num">18</span>Exegese Bíblica</li><li><span class="subject-num">19</span>Grego Bíblico</li><li><span class="subject-num">20</span>Hebraico Bíblico</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATRICULE-SE HOJE -->
+<section class="section bg-white">
+  <div class="section-inner">
+    <div class="reveal"><div class="s-tag">Como ingressar</div><h2 class="s-title">Matricule-se <em style="font-family:var(--font-serif);font-style:italic;color:var(--gold);">hoje</em></h2><p class="s-sub">Sem necessidade de diploma anterior. Basta o desejo de aprender e servir à Palavra.</p></div>
+    <div class="steps-grid">
+      <div class="step-card reveal"><div class="step-num">01</div><p class="step-label">Primeira etapa</p><h3 class="step-title">Escolha seu nível</h3><p class="step-desc">Básico (teologia sistemática), Médio (teologia bíblica) ou Bacharel (formação completa). Sem diploma anterior necessário.</p></div>
+      <div class="step-card reveal"><div class="step-num">02</div><p class="step-label">Segunda etapa</p><h3 class="step-title">Preencha seus dados</h3><p class="step-desc">Clique em "Me matricular por R$50", informe nome, e-mail, WhatsApp e nível desejado. O Gabriel entra em contato em minutos.</p></div>
+      <div class="step-card reveal"><div class="step-num">03</div><p class="step-label">Terceira etapa</p><h3 class="step-title">Início imediato</h3><p class="step-desc">Acesse o portal do aluno 24h por dia. Videoaulas com o professor, apostilas e acompanhamento desde o primeiro dia.</p></div>
+      <div class="step-card cta-card reveal">
+        <p class="step-label">Pronto para começar?</p>
+        <h3 class="step-title">Sua jornada na Palavra começa agora.</h3>
+        <button class="btn-main" onclick="abrirPopup()"><svg class="wa-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Me matricular por R$ 50,00</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOSSA PLATAFORMA -->
+<section class="section bg-gray">
+  <div class="section-inner">
+    <div class="reveal"><div class="s-tag">Nossa plataforma</div><h2 class="s-title">Ambiente criado para <em style="font-family:var(--font-serif);font-style:italic;">transformar</em></h2><div class="divider"></div></div>
+    <div class="campus-layout">
+      <div class="campus-gallery reveal">
+        <div class="campus-img tall"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_P1&sz=w800" alt="Plataforma" onerror="this.parentElement.innerHTML='<div class=\'campus-img-ph\'>📸 Foto da plataforma</div>'"></div>
+        <div class="campus-img"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_P2&sz=w800" alt="Plataforma" onerror="this.parentElement.innerHTML='<div class=\'campus-img-ph\'>📸 Foto 2</div>'"></div>
+        <div class="campus-img"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_P3&sz=w800" alt="Plataforma" onerror="this.parentElement.innerHTML='<div class=\'campus-img-ph\'>📸 Foto 3</div>'"></div>
+      </div>
+      <div class="reveal">
+        <p class="s-sub" style="margin-bottom:28px;">A UNITEKE oferece um ambiente de aprendizado completo, com videoaulas gravadas, materiais didáticos exclusivos, apostilas e suporte personalizado. Tudo pensado para que você estude no seu ritmo.</p>
+        <div class="platform-feature"><div class="pf-icon">🎥</div><div class="pf-info"><h4>Videoaulas em alta qualidade</h4><p>Gravadas pelo Prof. Nehemias. Assista quantas vezes quiser, quando quiser.</p></div></div>
+        <div class="platform-feature"><div class="pf-icon">📄</div><div class="pf-info"><h4>Apostilas e materiais exclusivos</h4><p>Material didático preparado especialmente para cada módulo do curso.</p></div></div>
+        <div class="platform-feature"><div class="pf-icon">💬</div><div class="pf-info"><h4>Suporte direto com a equipe</h4><p>Atendimento personalizado com o Gabriel via WhatsApp.</p></div></div>
+        <div class="platform-feature"><div class="pf-icon">📱</div><div class="pf-info"><h4>Acesso em qualquer dispositivo</h4><p>Computador, tablet ou celular. 24h por dia, 365 dias por ano.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOSSA FORMATURA -->
+<section class="section bg-white">
+  <div class="section-inner">
+    <div class="text-center reveal"><div class="s-tag">Nossa formatura</div><h2 class="s-title">Veja quem <em style="font-family:var(--font-serif);font-style:italic;color:var(--gold);">transformamos</em></h2><p class="s-sub" style="margin:10px auto 32px;">Fotos reais das nossas cerimônias de formatura. Uma instituição séria que existe e celebra cada conquista dos seus alunos.</p></div>
+    <div class="graduation-grid">
+      <div class="grad-photo reveal"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_F1&sz=w800" alt="Formatura" onerror="this.parentElement.innerHTML='<div class=\'grad-photo-ph\'>🎓 Foto de formatura</div>'"></div>
+      <div class="grad-photo reveal"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_F2&sz=w800" alt="Formatura" onerror="this.parentElement.innerHTML='<div class=\'grad-photo-ph\'>🎓 Foto de formatura</div>'"></div>
+      <div class="grad-photo reveal"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_F3&sz=w800" alt="Formatura" onerror="this.parentElement.innerHTML='<div class=\'grad-photo-ph\'>🎓 Foto de formatura</div>'"></div>
+      <div class="grad-photo reveal"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_F4&sz=w800" alt="Formatura" onerror="this.parentElement.innerHTML='<div class=\'grad-photo-ph\'>🎓 Foto de formatura</div>'"></div>
+      <div class="grad-photo reveal"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_F5&sz=w800" alt="Formatura" onerror="this.parentElement.innerHTML='<div class=\'grad-photo-ph\'>🎓 Foto de formatura</div>'"></div>
+      <div class="grad-photo reveal"><img src="https://drive.google.com/thumbnail?id=IMAGE_ID_F6&sz=w800" alt="Formatura" onerror="this.parentElement.innerHTML='<div class=\'grad-photo-ph\'>🎓 Foto de formatura</div>'"></div>
+    </div>
+    <div class="text-center" style="margin-top:40px;">
+      <button class="btn-main" onclick="abrirPopup()"><svg class="wa-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Quero ser o próximo formando</button>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA EXCLUSIVA -->
+<section class="offer-section" id="oferta">
+  <div class="offer-inner reveal">
+    <p class="offer-label">✦ Oferta Exclusiva</p>
+    <h2 class="offer-title">Sua <em>matrícula por R$50</em><br>está <em style="font-family:var(--font-serif);font-style:italic;">garantida.</em></h2>
+    <div class="offer-card">
+      <div class="offer-card-header"><span>✦ Exclusivo para alunos Academy ✦</span></div>
+      <div class="offer-card-body">
+        <h3>Formação Teológica <em>Completa</em></h3>
+        <p class="offer-card-desc">Comece hoje sua jornada do Básico ao Bacharel com certificado de conclusão Kerigma.</p>
+        <ul class="offer-features">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C400" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>44 matérias de teologia completa (3 níveis)</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C400" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Certificado de conclusão emitido pela Universidade Kerigma</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C400" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Oportunidade de solicitar Cert. MEC ao final da formação (condição especial)</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C400" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Aulas com o Prof. Dr. Nehemias Santos (80+ obras publicadas)</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C400" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>100% online — estude no seu ritmo, de qualquer lugar</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><strong style="color:#fff;">Matrícula por apenas R$ 50,00</strong> · depois R$100/mês</li>
+        </ul>
+        <div class="offer-price-block">
+          <div class="offer-price-old">Matrícula: R$ 50,00</div>
+          <div class="offer-price-main">
+            <span class="offer-price-curr">R$</span>
+            <span class="offer-price-val">50</span>
+            <span class="offer-price-per">,00</span>
+          </div>
+          <div class="offer-price-note">Taxa única de matrícula · Depois R$ 100/mês · Sem fidelidade</div>
+        </div>
+        <button class="btn-main lg" style="width:100%;justify-content:center;" onclick="abrirPopup()">
+          <svg class="wa-svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Me matricular por apenas R$ 50,00
+        </button>
+        <div class="offer-pay-methods">
+          <span>PIX</span><div class="offer-pay-div"></div>
+          <span>Boleto</span><div class="offer-pay-div"></div>
+          <span>Cartão</span><div class="offer-pay-div"></div>
+          <span>Visa</span><div class="offer-pay-div"></div>
+          <span>Master</span><div class="offer-pay-div"></div>
+          <span>Elo</span>
+        </div>
+      </div>
+    </div>
+    <p class="offer-guarantee">🔒 Matrícula simples e segura · Início Imediato · Pague via Pix ou Cartão de Crédito</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Universidade Kerigma · Instituto ITEKE</strong><br>Formação Teológica de Excelência · Presença em 12 países<br>Certificado de conclusão emitido pela Universidade Kerigma. Ao final da formação completa, o aluno tem a oportunidade de solicitar, com condição especial, o Certificado de Extensão Universitária reconhecido pelo MEC, em parceria com a UNIFATEC.<br><br>© 2026 Universidade Teológica Kerigma. Todos os direitos reservados.</p>
+</footer>
+
+<!-- FLOATING CTA -->
+<div class="floating-cta" id="floatCta">
+  <button class="floating-btn" onclick="abrirPopup()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Me matricular por R$ 50,00
+  </button>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup-box">
+    <div class="popup-head">
+      <div class="popup-nivel-lbl">Formação em Teologia</div>
+      <h3>Garanta sua vaga</h3>
+      <p>Preencha seus dados e vamos cuidar do resto!</p>
+      <button class="popup-close" onclick="fecharPopup()">✕</button>
+    </div>
+    <div class="popup-body">
+      <div class="form-group"><label for="p-nome">Nome completo *</label><input type="text" id="p-nome" placeholder="Seu nome completo"></div>
+      <div class="form-group"><label for="p-email">E-mail *</label><input type="email" id="p-email" placeholder="seu@email.com"></div>
+      <div class="form-group"><label for="p-fone">WhatsApp *</label><input type="tel" id="p-fone" placeholder="(11) 99999-9999"></div>
+      <div class="form-group"><label for="p-nivel">Por qual nível deseja iniciar? *</label><div class="sel-wrap"><select id="p-nivel"><option value="" disabled selected>Selecione o nível de início</option><option value="Basico">Básico em Teologia (Nível 1 — do zero)</option><option value="Medio">Médio em Teologia (Nível 2 — já tenho base)</option><option value="Bacharel">Bacharel em Teologia (Nível 3 — avançado)</option></select></div></div>
+      <button class="popup-submit" id="p-btn" onclick="enviar()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Continuar para WhatsApp →
+      </button>
+      <p class="popup-privacy">🔒 Seus dados são protegidos e usados apenas para contato sobre sua matrícula.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const CFG={gabriel:'5511913340434',rd_token:'SEU_TOKEN_RD_AQUI',conversions:{Basico:'matricula-basico-oportunidade',Medio:'matricula-medio-oportunidade',Bacharel:'matricula-bacharel-oportunidade'}};
+function waMsgs(n,v){const m={Basico:`Olá Gabriel! Meu nome é ${n}. Acabei de comprar um curso no Kerigma Academy e quero me matricular na Formação Teológica — Nível Básico. Pode me ajudar?`,Medio:`Olá Gabriel! Meu nome é ${n}. Acabei de comprar um curso no Kerigma Academy e quero me matricular na Formação Teológica — Nível Médio. Pode me ajudar?`,Bacharel:`Olá Gabriel! Meu nome é ${n}. Acabei de comprar um curso no Kerigma Academy e quero me matricular na Formação Teológica — Nível Bacharel. Pode me ajudar?`};return encodeURIComponent(m[v]||m.Basico);}
+function abrirPopup(){document.getElementById('popupOverlay').classList.add('active');document.body.style.overflow='hidden';}
+function fecharPopup(){document.getElementById('popupOverlay').classList.remove('active');document.body.style.overflow='';}
+document.getElementById('popupOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('popupOverlay'))fecharPopup();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharPopup();});
+async function enviar(){
+  const n=document.getElementById('p-nome').value.trim(),em=document.getElementById('p-email').value.trim(),f=document.getElementById('p-fone').value.trim(),v=document.getElementById('p-nivel').value,btn=document.getElementById('p-btn');
+  if(!n||!em||!f||!v){alert('Por favor, preencha todos os campos.');return;}
+  if(!em.includes('@')){alert('Informe um e-mail válido.');return;}
+  btn.disabled=true;btn.textContent='Enviando...';
+  try{await fetch(`https://api.rd.services/platform/conversions?api_key=${CFG.rd_token}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event_type:'CONVERSION',event_family:'CDP',payload:{conversion_identifier:CFG.conversions[v]||'matricula-oportunidade',name:n,email:em,mobile_phone:f.replace(/\D/g,''),cf_nivel_formacao:v,cf_origem:'pagina-oportunidade'}})});}catch(e){console.warn('RD:',e);}
+  fecharPopup();window.open(`https://api.whatsapp.com/send?phone=${CFG.gabriel}&text=${waMsgs(n,v)}`,'_blank');
+  btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Continuar para WhatsApp →';
+}
+document.getElementById('p-fone').addEventListener('input',function(){let v=this.value.replace(/\D/g,'');if(v.length>11)v=v.slice(0,11);if(v.length>7)v=`(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;else if(v.length>2)v=`(${v.slice(0,2)}) ${v.slice(2)}`;else if(v.length>0)v=`(${v}`;this.value=v;});
+function ativarVideo(){const i=document.getElementById('hero-iframe');i.src=i.dataset.src;document.getElementById('hero-ph').style.display='none';}
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+const fc=document.getElementById('floatCta');
+new IntersectionObserver(entries=>{entries.forEach(e=>{fc.classList.toggle('visible',!e.isIntersecting);});},{threshold:0}).observe(document.getElementById('hero'));
+</script>
+</body>
+</html>
