@@ -1,0 +1,83 @@
+/*
+  abertura-de-classe.css
+  Arquivo separado para a página de abertura de classe em Cidade Tiradentes.
+  Não será sobrescrito pelo painel admin (que só regenera index.html).
+*/
+
+/* === Centraliza a grade de cursos com apenas 1 card === */
+#programas .cards-grid,
+#programas .courses-grid,
+.courses-section .grid,
+.programs-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center !important;
+  gap: 2rem;
+}
+
+/* === Limita a largura do card único para ficar elegante === */
+#programas .card,
+#programas .course-card,
+.courses-section .card {
+  max-width: 480px !important;
+  width: 100%;
+}
+
+/* === Destaque especial no badge "Inscrições Abertas" === */
+.badge-open,
+.card .badge,
+.course-card .status-badge {
+  background: var(--yellow, #F5C400) !important;
+  color: var(--navy, #10284E) !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* === Sombra e borda no card para dar mais destaque === */
+#programas .card,
+#programas .course-card {
+  box-shadow: 0 8px 40px rgba(16, 40, 78, 0.13) !important;
+  border: 2px solid var(--yellow, #F5C400) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#programas .card:hover,
+#programas .course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(16, 40, 78, 0.18) !important;
+}
+
+/* === Botão de matrícula centralizado dentro do card === */
+#programas .card .btn-card-primary,
+#programas .course-card .btn-card-primary {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1.5rem;
+  background: var(--navy, #10284E) !important;
+  color: var(--yellow, #F5C400) !important;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  transition: background 0.2s;
+}
+
+#programas .card .btn-card-primary:hover,
+#programas .course-card .btn-card-primary:hover {
+  background: #1a3d6b !important;
+}
+
+/* === Título da seção de cursos centralizado === */
+#programas .section-header,
+#programas .section-title,
+.programs-section h2 {
+  text-align: center;
+}
