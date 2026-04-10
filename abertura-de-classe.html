@@ -162,13 +162,11 @@ async function submitLM(){
   btn.disabled=true;
 
   // ── Enviar para Google Sheets ──
+  // ── Enviar para Google Sheets ──
   try{
-    await fetch('https://script.google.com/macros/s/AKfycbyR0vmMnWNp3ggW1ThmARq3Wm79TgU2wnsOStNsvV5UXQIbZFXAb-b5ObR4p2kZpH8F/exec',{
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({nome:nome,email:email,telefone:phone,origem:'abertura-de-classe'})
-    });
+    var sheetUrl='https://script.google.com/macros/s/AKfycbyR0vmMnWNp3ggW1ThmARq3Wm79TgU2wnsOStNsvV5UXQIbZFXAb-b5ObR4p2kZpH8F/exec';
+    var params=new URLSearchParams({nome:nome,email:email,telefone:phone,origem:'abertura-de-classe'});
+    navigator.sendBeacon(sheetUrl+'?'+params.toString());
   }catch(e){console.warn('Sheets erro:',e);}
 
   // Fire Meta Pixel
