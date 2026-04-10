@@ -160,11 +160,21 @@ async function submitLM(){
   err.style.display='none';
   btn.textContent='Enviando...';
   btn.disabled=true;
+
+  // ── Enviar para Google Sheets ──
+  try{
+    await fetch('https://script.google.com/macros/s/AKfycbyR0vmMnWNp3ggW1ThmARq3Wm79TgU2wnsOStNsvV5UXQIbZFXAb-b5ObR4p2kZpH8F/exec',{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nome:nome,email:email,telefone:phone,origem:'abertura-de-classe'})
+    });
+  }catch(e){console.warn('Sheets erro:',e);}
+
   // Fire Meta Pixel
   if(_lmData.pixel&&typeof fbq!=='undefined')fbq('trackCustom',_lmData.pixel,{course:_lmData.course,nome:nome,email:email});
-
   // Build WhatsApp URL with message
-  var msgTemplate='Olá! Me chamo {nome} e tenho interesse no curso de {curso}. Gostaria de mais informações sobre como me matrícular.';
+  var msgTemplate='Olá! Me chamo {nome} e me inscrevi para a primeira turma da Cidade Tiradentes';
   var msg=msgTemplate.replace(/\{nome\}/g,nome).replace(/\{curso\}/g,_lmData.course);
   var baseUrl=_lmData.href||'';
   var waUrl=baseUrl+(baseUrl.includes('?')?'&text=':'?text=')+encodeURIComponent(msg);
