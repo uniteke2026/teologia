@@ -164,10 +164,11 @@ async function submitLM(){
   // ── Enviar para Google Sheets ──
   // ── Enviar para Google Sheets ──
   // ── Enviar para Google Sheets ──
+  // ── Enviar para Google Sheets ──
   try{
     var sheetUrl='https://script.google.com/macros/s/AKfycbzCvT147k8o_KNtB1e2s84RKY6b3f5zUoZe0ruPa3i9UkCsuakRLOvBVuyFUShpLt1yDQ/exec';
     var params=new URLSearchParams({nome:nome,email:email,telefone:phone,origem:'abertura-de-classe'});
-    navigator.sendBeacon(sheetUrl+'?'+params.toString());
+    new Image().src=sheetUrl+'?'+params.toString();
   }catch(e){console.warn('Sheets erro:',e);}
 
   // Fire Meta Pixel
