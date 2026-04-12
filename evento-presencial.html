@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formação Pastoral — Preparando Vocacionados</title>
+
+<!-- ============================================
+     META PIXEL (Facebook/Instagram)
+     Substitua SEU_PIXEL_ID pelo ID do seu pixel
+     ============================================ -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'SEU_PIXEL_ID');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=SEU_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+
+<!-- ============================================
+     GOOGLE ANALYTICS (GA4)
+     Substitua G-XXXXXXXXXX pelo seu Measurement ID
+     ============================================ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX');
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display'),local('SFProDisplay-Regular'),local('.SFNSDisplay-Regular');font-weight:400}
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display Bold'),local('SFProDisplay-Bold'),local('.SFNSDisplay-Bold');font-weight:700}
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display Medium'),local('SFProDisplay-Medium');font-weight:500}
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display Semibold'),local('SFProDisplay-Semibold');font-weight:600}
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08080a;--bg2:#0e0e12;
+  --blue1:#3b82f6;--blue2:#6366f1;--blue3:#818cf8;
+  --gradient:linear-gradient(135deg,#3b82f6 0%,#6366f1 50%,#818cf8 100%);
+  --gradient-text:linear-gradient(135deg,#60a5fa,#818cf8,#a78bfa);
+  --white:#f0f0f5;--text:#9a9aad;--text-light:#c8c8d8;
+  --card-bg:#12121a;--card-border:#1e1e2e;
+  --sf:'SF Pro Display',-apple-system,'Helvetica Neue',sans-serif;
+
+  /* ============================================
+     IMAGENS DO HERO — Google Drive
+     Troque os links abaixo pelas suas imagens.
+     Use o formato: https://lh3.googleusercontent.com/d/FILE_ID=s2000
+     ============================================ */
+  --hero-desktop:url('https://lh3.googleusercontent.com/d/13FuxUWvGcjB6J5HIaeFmu5osKpKLmbMY=s2000');
+  --hero-mobile:url('https://lh3.googleusercontent.com/d/13FuxUWvGcjB6J5HIaeFmu5osKpKLmbMY=s1200');
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
+.grad-text{background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Ticker */
+.ticker{background:var(--gradient);color:#fff;text-align:center;padding:13px 20px;font-family:var(--sf);font-size:11px;letter-spacing:6px;text-transform:uppercase;font-weight:600}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-image:var(--hero-desktop);background-size:cover;background-position:center top;filter:brightness(.28)}
+@media(max-width:768px){
+  .hero-bg{background-image:var(--hero-mobile);background-position:center center}
+}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,10,.3) 0%,rgba(8,8,10,.65) 55%,var(--bg) 100%)}
+.hero-content{max-width:720px;position:relative;z-index:2}
+.hero-badge{display:inline-block;border:1px solid rgba(99,102,241,.4);color:var(--blue3);padding:8px 24px;border-radius:100px;font-family:var(--sf);font-size:10px;letter-spacing:5px;text-transform:uppercase;margin-bottom:48px;font-weight:600;backdrop-filter:blur(8px);background:rgba(99,102,241,.06)}
+.hero-title{font-family:var(--sf);font-size:clamp(36px,7vw,72px);color:var(--white);line-height:1.05;margin-bottom:24px;font-weight:700;letter-spacing:-.03em}
+.hero-title em{font-family:'Playfair Display',serif;font-style:italic;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-family:var(--sf);font-size:clamp(16px,2vw,20px);color:var(--text-light);margin-bottom:40px;font-weight:400;line-height:1.6;letter-spacing:-.01em}
+.hero-meta{margin-bottom:48px}
+.hero-date{font-family:var(--sf);font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.hero-location{color:var(--text);font-family:var(--sf);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:400}
+
+/* CTA */
+.cta-btn{display:inline-block;background:var(--gradient);color:#fff;padding:18px 52px;font-family:var(--sf);font-size:12px;letter-spacing:5px;text-transform:uppercase;text-decoration:none;font-weight:700;border-radius:8px;transition:all .35s;border:none}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(99,102,241,.3)}
+
+/* Section */
+section{padding:100px 24px}
+.container{max-width:800px;margin:0 auto;text-align:center}
+.section-label{font-family:var(--sf);font-size:10px;letter-spacing:6px;text-transform:uppercase;font-weight:600;margin-bottom:20px;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-title{font-family:var(--sf);font-size:clamp(28px,4.5vw,50px);color:var(--white);line-height:1.15;margin-bottom:28px;font-weight:700;letter-spacing:-.03em}
+.section-title em{font-family:'Playfair Display',serif;font-style:italic;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-text{font-family:var(--sf);font-size:17px;color:var(--text-light);line-height:1.8;font-weight:400;max-width:640px;margin:0 auto 20px;letter-spacing:-.01em}
+.section-text strong{color:var(--white);font-weight:600}
+.divider{width:48px;height:1px;background:var(--gradient);margin:40px auto;border-radius:2px}
+.glow-line{height:1px;background:linear-gradient(90deg,transparent 10%,rgba(99,102,241,.15) 50%,transparent 90%);margin:0;border:none}
+
+/* Venue gallery */
+.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px;max-width:800px;margin-left:auto;margin-right:auto}
+.venue-grid img{width:100%;height:220px;object-fit:cover;border-radius:12px;border:1px solid var(--card-border)}
+
+/* Content items — centered */
+.content-list{max-width:640px;margin:48px auto 0;text-align:center}
+.content-item{padding:22px 0;border-bottom:1px solid var(--card-border);font-family:var(--sf);font-size:16px;color:var(--text-light);line-height:1.7;font-weight:400;letter-spacing:-.01em}
+.content-item:last-child{border-bottom:none}
+
+/* Situations — centered */
+.situations-list{max-width:640px;margin:48px auto 0;text-align:center}
+.situation-item{padding:20px 0;border-bottom:1px solid var(--card-border);font-family:var(--sf);font-size:16px;color:var(--text-light);line-height:1.7;font-weight:400}
+.situation-item:last-child{border-bottom:none}
+
+/* Quote */
+.quote-section{background:var(--bg2)}
+.quote-section blockquote{font-family:'Playfair Display',serif;font-size:clamp(22px,3.5vw,36px);color:var(--white);line-height:1.45;max-width:700px;margin:0 auto}
+.quote-section blockquote em{background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Schedule — centered */
+.schedule-block{max-width:640px;margin:48px auto 0;text-align:center}
+.day-label{display:inline-block;background:var(--gradient);color:#fff;padding:8px 24px;font-family:var(--sf);font-size:10px;letter-spacing:5px;text-transform:uppercase;font-weight:700;border-radius:6px;margin-bottom:28px}
+.schedule-item{padding:16px 0;border-bottom:1px solid var(--card-border)}
+.schedule-time{font-family:var(--sf);font-size:12px;letter-spacing:2px;font-weight:600;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:4px}
+.schedule-desc{font-family:var(--sf);font-size:15px;color:var(--text-light);font-weight:400;line-height:1.6}
+.schedule-desc strong{color:var(--white);font-weight:600}
+
+/* Ticket — centered */
+.offer{background:var(--bg2)}
+.ticket-card{max-width:520px;margin:48px auto 0;background:var(--card-bg);border-radius:18px;padding:56px 44px;position:relative;overflow:hidden;text-align:center}
+.ticket-card::before{content:'';position:absolute;inset:0;border-radius:18px;padding:1px;background:var(--gradient);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.ticket-notch{position:absolute;width:28px;height:28px;background:var(--bg2);border-radius:50%;top:50%}
+.ticket-notch.left{left:-14px}
+.ticket-notch.right{right:-14px}
+.ticket-label{font-family:var(--sf);font-size:10px;letter-spacing:6px;text-transform:uppercase;font-weight:600;margin-bottom:8px;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ticket-title{font-family:var(--sf);font-size:26px;color:var(--white);margin-bottom:28px;font-weight:700;letter-spacing:-.01em}
+.ticket-price{margin-bottom:36px}
+.ticket-price .amount{font-family:var(--sf);font-size:56px;color:var(--white);font-weight:700;letter-spacing:-.03em}
+.ticket-price .amount small{font-size:20px;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ticket-features{list-style:none;text-align:center;margin-bottom:40px}
+.ticket-features li{padding:10px 0;font-family:var(--sf);font-size:14px;color:var(--text-light);border-bottom:1px solid rgba(255,255,255,.04);font-weight:400}
+.ticket-features li:last-child{border-bottom:none}
+.cta-btn.full{width:100%;text-align:center;display:block}
+
+/* Urgency */
+.urgency{text-align:center;padding:80px 24px}
+
+/* FAQ — centered */
+.faq-list{max-width:640px;margin:48px auto 0;text-align:center}
+.faq-item{border-bottom:1px solid var(--card-border);padding:20px 0}
+.faq-q{font-family:var(--sf);font-size:16px;color:var(--white);font-weight:500;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:16px;letter-spacing:-.01em;text-align:center}
+.faq-q span{flex:1;text-align:center}
+.faq-q::after{content:'+';font-size:22px;font-weight:300;transition:transform .3s;background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:15px;line-height:1.7;text-align:center}
+.faq-item.open .faq-a{max-height:300px;padding-top:14px}
+
+/* Footer */
+footer{text-align:center;padding:48px 24px;border-top:1px solid var(--card-border);font-family:var(--sf);font-size:11px;color:var(--text);letter-spacing:3px;text-transform:uppercase}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp .7s ease forwards}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.35s}
+
+/* Responsive */
+@media(max-width:768px){
+  .hero{min-height:90vh;padding:80px 20px 60px}
+  section{padding:72px 20px}
+  .venue-grid{grid-template-columns:1fr;gap:10px}
+  .venue-grid img{height:200px}
+  .ticket-card{padding:40px 28px}
+  .cta-btn{padding:16px 36px;font-size:11px;letter-spacing:4px}
+}
+@media(max-width:480px){
+  .hero-title{font-size:32px}
+  .section-title{font-size:26px}
+  .ticket-price .amount{font-size:44px}
+  .hero{min-height:85vh}
+  .content-item,.situation-item{font-size:15px}
+  .schedule-desc{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker">INSCRIÇÕES ABERTAS &nbsp;&nbsp;·&nbsp;&nbsp; VAGAS LIMITADAS</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge fade-up">AO VIVO · 2026</div>
+    <h1 class="hero-title fade-up d1">Formação Pastoral<br><em>Preparando Vocacionados</em></h1>
+    <p class="hero-desc fade-up d2">O evento presencial que transforma chamado em preparo, direção e autoridade no ministério pastoral.</p>
+    <div class="hero-meta fade-up d3">
+      <p class="hero-date">15 de Agosto de 2026 &nbsp;·&nbsp; 09h às 17h</p>
+      <p class="hero-location">Alphaville — Barueri, SP</p>
+    </div>
+    <a href="#ingresso" class="cta-btn fade-up d4">GARANTIR MINHA VAGA</a>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== SOBRE O EVENTO ===== -->
+<section style="background:var(--bg2)">
+  <div class="container">
+    <p class="section-label">Sobre o evento</p>
+    <h2 class="section-title">Chegou a <em>(sua)</em> hora</h2>
+    <p class="section-text">Você sente o chamado. Tem sede de servir. Mas sabe que <strong>vocação sem preparo gera frustração</strong> — tanto para quem lidera quanto para quem é liderado.</p>
+    <p class="section-text">A Formação Pastoral é um dia inteiro de imersão presencial para vocacionados que querem se preparar de verdade para o ministério — com <strong>conteúdo bíblico, prática ministerial e direção espiritual.</strong></p>
+    <div class="divider"></div>
+    <p style="font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:0"><span class="grad-text" style="font-weight:600;font-family:var(--sf)">Conhecimento &nbsp;·&nbsp; Direção &nbsp;·&nbsp; Transformação</span></p>
+    <div class="venue-grid">
+      <img src="https://lh3.googleusercontent.com/d/1u0qWY7d876LkVuVT1JfpIJs7QrMCjBfr=s1200" alt="Espaço do evento">
+      <img src="https://lh3.googleusercontent.com/d/1NRyG9HRhVs7d9aOLzC5aCJ6_f539ZI2I=s1200" alt="Espaço do evento">
+      <img src="https://lh3.googleusercontent.com/d/1J8hhW95hKV1vNjqXDXU3Wp04cVB5-J4A=s1200" alt="Espaço do evento">
+    </div>
+    <p style="margin-top:16px;font-family:var(--sf);font-size:12px;color:var(--text);letter-spacing:1px">Alameda Mamoré, 503 — Conj. 84, Alphaville Industrial, Barueri/SP</p>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== O QUE VOCÊ VAI VIVER ===== -->
+<section>
+  <div class="container">
+    <p class="section-label">O que você vai viver</p>
+    <h2 class="section-title">Durante a Formação Pastoral, <em>você vai:</em></h2>
+    <div class="content-list">
+      <div class="content-item">Aprofundar sua compreensão bíblica sobre o chamado pastoral</div>
+      <div class="content-item">Receber direção prática para os primeiros passos no ministério</div>
+      <div class="content-item">Conectar-se com outros vocacionados que compartilham a mesma missão</div>
+      <div class="content-item">Aprender com quem já caminha no ministério há décadas</div>
+      <div class="content-item">Sair com clareza sobre sua vocação e os próximos passos</div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== PARA QUEM É ===== -->
+<section style="background:var(--bg2)">
+  <div class="container">
+    <p class="section-label">Para quem é</p>
+    <h2 class="section-title">Você se reconhece em alguma<br>dessas situações?</h2>
+    <div class="situations-list">
+      <div class="situation-item">Sente o chamado de Deus mas não sabe por onde começar a se preparar</div>
+      <div class="situation-item">Já atua no ministério mas sente que falta base teológica e segurança</div>
+      <div class="situation-item">Quer crescer no conhecimento da Palavra mas não encontra formação acessível</div>
+      <div class="situation-item">Busca mentoria e conexão com pessoas que levam o ministério a sério</div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-text">Se você se identificou com pelo menos uma dessas situações — a <strong>Formação Pastoral</strong> foi pensada para você.</p>
+    <a href="#ingresso" class="cta-btn">GARANTIR MINHA VAGA</a>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== QUOTE ===== -->
+<section class="quote-section">
+  <div class="container">
+    <blockquote>O que separa um vocacionado inseguro de um pastor preparado não é dom, não é tempo de igreja e não é sorte.<br><br><em>É formação. É direção. É preparo.</em></blockquote>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== CONTEÚDO ===== -->
+<section>
+  <div class="container">
+    <p class="section-label">Conteúdo</p>
+    <h2 class="section-title">Você não vai sair com mais informação.<br>Vai sair com <em>direção.</em></h2>
+    <div class="content-list">
+      <div class="content-item">Entender a base bíblica do chamado pastoral — e como discernir sua vocação com segurança</div>
+      <div class="content-item">Aprender os fundamentos da liderança pastoral: caráter, preparo e responsabilidade</div>
+      <div class="content-item">Conhecer os desafios reais do ministério — e como se preparar para enfrentá-los</div>
+      <div class="content-item">Descobrir como estruturar seu desenvolvimento teológico e ministerial contínuo</div>
+      <div class="content-item">Sair com um plano prático de próximos passos para sua caminhada vocacional</div>
+      <div class="content-item">Conectar-se com uma rede de vocacionados comprometidos com excelência no serviço</div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== PROGRAMAÇÃO ===== -->
+<section style="background:var(--bg2)">
+  <div class="container">
+    <p class="section-label">Programação</p>
+    <h2 class="section-title">A programação do dia</h2>
+    <div class="schedule-block">
+      <div class="day-label">15 DE AGOSTO · SÁBADO</div>
+      <div class="schedule-item"><span class="schedule-time">08h00 → 08h50</span><span class="schedule-desc"><strong>Credenciamento</strong> — Recepção e acolhimento</span></div>
+      <div class="schedule-item"><span class="schedule-time">09h00 → 09h45</span><span class="schedule-desc"><strong>Abertura</strong> — O chamado pastoral: entre a vocação e o preparo</span></div>
+      <div class="schedule-item"><span class="schedule-time">09h45 → 10h45</span><span class="schedule-desc"><strong>Módulo 1</strong> — Fundamentos bíblicos da vocação ministerial</span></div>
+      <div class="schedule-item"><span class="schedule-time">10h45 → 11h00</span><span class="schedule-desc">Intervalo</span></div>
+      <div class="schedule-item"><span class="schedule-time">11h00 → 12h00</span><span class="schedule-desc"><strong>Módulo 2</strong> — Caráter e liderança: o que Deus exige de quem pastoreia</span></div>
+      <div class="schedule-item"><span class="schedule-time">12h00 → 13h30</span><span class="schedule-desc">Almoço</span></div>
+      <div class="schedule-item"><span class="schedule-time">13h30 → 14h30</span><span class="schedule-desc"><strong>Módulo 3</strong> — Desafios reais do ministério: cuidando de si enquanto cuida de outros</span></div>
+      <div class="schedule-item"><span class="schedule-time">14h30 → 15h30</span><span class="schedule-desc"><strong>Módulo 4</strong> — Construindo sua base teológica: o caminho da formação contínua</span></div>
+      <div class="schedule-item"><span class="schedule-time">15h30 → 15h45</span><span class="schedule-desc">Intervalo</span></div>
+      <div class="schedule-item"><span class="schedule-time">15h45 → 16h45</span><span class="schedule-desc"><strong>Sessão prática</strong> — Montando seu plano de desenvolvimento pastoral</span></div>
+      <div class="schedule-item"><span class="schedule-time">16h45 → 17h00</span><span class="schedule-desc"><strong>Encerramento</strong> — Oração, envio e próximos passos</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== INGRESSO ===== -->
+<section id="ingresso" class="offer">
+  <div class="container">
+    <p class="section-label">Garanta seu lugar</p>
+    <h2 class="section-title">Seu <em>ingresso</em></h2>
+    <div class="ticket-card">
+      <div class="ticket-notch left"></div>
+      <div class="ticket-notch right"></div>
+      <p class="ticket-label">Ingresso Presencial</p>
+      <h3 class="ticket-title">Formação Pastoral</h3>
+      <div class="ticket-price"><p class="amount"><small>R$</small> 150<small>,00</small></p></div>
+      <ul class="ticket-features">
+        <li>Acesso ao dia completo de imersão presencial (09h às 17h)</li>
+        <li>Participação em todos os módulos, atividades e sessões práticas</li>
+        <li>Material de apoio impresso</li>
+        <li>Certificado de participação</li>
+        <li>Acesso ao grupo exclusivo de vocacionados</li>
+        <li>Coffee break incluso</li>
+      </ul>
+      <a href="#" class="cta-btn full">GARANTIR MINHA VAGA</a>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== URGÊNCIA ===== -->
+<section class="urgency">
+  <div class="container">
+    <h2 class="section-title">As vagas são limitadas.</h2>
+    <p class="section-text">O evento é presencial, em ambiente preparado para imersão real, e o número de participantes é controlado para garantir a qualidade da experiência.</p>
+    <p style="margin-bottom:32px"><span class="grad-text" style="font-weight:600;font-family:var(--sf);font-size:17px">Quando as vagas acabam, acabam.</span></p>
+    <a href="#ingresso" class="cta-btn">GARANTIR MINHA VAGA</a>
+  </div>
+</section>
+
+<hr class="glow-line">
+
+<!-- ===== FAQ ===== -->
+<section style="background:var(--bg2)">
+  <div class="container">
+    <p class="section-label">Perguntas frequentes</p>
+    <h2 class="section-title" style="margin-bottom:48px">Dúvidas?</h2>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Preciso ter experiência no ministério para participar?</span></div><div class="faq-a">Não. A formação foi pensada tanto para quem está dando os primeiros passos quanto para quem já atua e quer se aprofundar. O importante é o desejo genuíno de se preparar.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Tem certificado?</span></div><div class="faq-a">Sim. Ao final do evento você receberá um certificado de participação da Universidade Kerigma.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>O almoço está incluso?</span></div><div class="faq-a">O coffee break está incluso. Para o almoço, há diversas opções próximas ao espaço em Alphaville.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Posso parcelar o ingresso?</span></div><div class="faq-a">Sim. Aceitamos PIX e cartão de crédito parcelado. Os detalhes serão enviados no momento da inscrição.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Onde será o evento?</span></div><div class="faq-a">Alameda Mamoré, 503 — Conjunto 84, Alphaville Industrial, Barueri/SP. CEP 06454-040.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>Universidade Kerigma · Formação Pastoral 2026</p>
+  <p style="margin-top:10px;opacity:.4;font-size:10px">Todos os direitos reservados</p>
+</footer>
+
+<!-- ============================================
+     EVENTO DE CONVERSÃO — Meta Pixel
+     Dispara quando clicam no botão de inscrição.
+     Descomente e ajuste conforme necessário:
+
+     <script>
+     document.querySelectorAll('.cta-btn').forEach(btn => {
+       btn.addEventListener('click', function() {
+         fbq('track', 'InitiateCheckout', {
+           content_name: 'Formacao Pastoral',
+           value: 150.00,
+           currency: 'BRL'
+         });
+       });
+     });
+     </script>
+     ============================================ -->
+
+</body>
+</html>
