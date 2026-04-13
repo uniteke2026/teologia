@@ -192,7 +192,16 @@ function App(){
 
   const applyRemoteData=useCallback((data)=>{
     hydrating.current=true;
-    setLeads(Array.isArray(data?.leads)?data.leads.map(l=>({...l,valor:Number(l.valor)||cfg.valorPadrao||50,notas:Array.isArray(l.notas)?l.notas:[]})):[]);
+    setLeads(Array.isArray(data?.leads)?data.leads.map(l=>({
+      ...l,
+      nome:String(l.nome||''),
+      email:String(l.email||''),
+      whatsapp:String(l.whatsapp||''),
+      status:l.status||'novo',
+      vendedor:l.vendedor||'',
+      valor:Number(l.valor)||cfg.valorPadrao||50,
+      notas:Array.isArray(l.notas)?l.notas:[]
+    })):[]);
     setVends(Array.isArray(data?.vendedores)&&data.vendedores.length?data.vendedores:[{id:'gabriel',nome:'Gabriel Ribeiro'}]);
     if(data?.config){
       const ms=data.config.metaSemanal||{};
@@ -238,14 +247,17 @@ function App(){
     API.importSource().then(r=>{
       if(!r?.success){setSyncSt('error');sT('Erro ao importar leads');return}
       API.fetch().then(data=>{
-        if(data){applyRemoteData(data);setSyncSt('synced');sT((r.imported||0)+' leads importados da planilha!')}else{setSyncSt('error');sT('Importou, mas não consegui recarregar os dados')}})
-    })
+        if(data){applyRemoteData(data);setSyncSt('synced');sT((r.imported||0)+' leads importados da planilha!')}
+        else{setSyncSt('error');sT('Importou, mas não consegui recarregar os dados')}
+      });
+    });
   },[applyRemoteData]);
-  const wpUrl=(num,msg)=>{const n=num.replace(/\D/g,'');if(!n)return'';const full=n.startsWith('55')?n:'55'+n;const m=encodeURIComponent(msg||cfg.whatsappMsg||'');return'https://wa.me/'+full+(m?'?text='+m:'')};
+
+  const wpUrl=(num,msg)=>{const n=String(num||'').replace(/\D/g,'');if(!n)return'';const full=n.startsWith('55')?n:'55'+n;const m=encodeURIComponent(msg||cfg.whatsappMsg||'');return'https://wa.me/'+full+(m?'?text='+m:'')};
 
   const uL=(id,up)=>{setLeads(p=>p.map(l=>{if(l.id!==id)return l;const u={...l,...up,updatedAt:new Date().toISOString()};if(up.status&&up.status!==l.status){aA('<strong>'+l.nome+'</strong> → <strong>'+sI(up.status).l+'</strong>');if(up.status==='matriculado')u.dataMatricula=new Date().toISOString();if(up.status==='contatado'&&!l.dataContato)u.dataContato=new Date().toISOString()}return u}))};
   const dL=id=>{const l=leads.find(x=>x.id===id);if(l)aA('Lead <strong>'+l.nome+'</strong> removido');setLeads(p=>p.filter(x=>x.id!==id))};
-  const iL=data=>{const vp=cfg.valorPadrao||50;const nl=data.map(r=>{const n=(r.Nome||r.nome||r.NOME||r.name||'').trim();const e=(r.Email||r.email||r.EMAIL||r['E-mail']||'').trim();const w=(r.WhatsApp||r.whatsapp||r.WHATSAPP||r.Telefone||r.telefone||r.Celular||r.celular||r.phone||'').toString().trim();if(!n&&!e&&!w)return null;return{id:gid(),nome:n,email:e,whatsapp:w,status:'novo',vendedor:'',valor:vp,notas:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),dataContato:null,dataMatricula:null}}).filter(Boolean);setLeads(p=>[...p,...nl]);aA('<strong>'+nl.length+' leads</strong> importados');sT(nl.length+' leads importados!')};
+  const iL=data=>{const vp=cfg.valorPadrao||50;const nl=data.map(r=>{const n=String(r.Nome||r.nome||r.NOME||r.name||'').trim();const e=String(r.Email||r.email||r.EMAIL||r['E-mail']||'').trim();const w=String(r.WhatsApp||r.whatsapp||r.WHATSAPP||r.Telefone||r.telefone||r.Celular||r.celular||r.phone||'').trim();if(!n&&!e&&!w)return null;return{id:gid(),nome:n,email:e,whatsapp:w,status:'novo',vendedor:'',valor:vp,notas:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),dataContato:null,dataMatricula:null}}).filter(Boolean);setLeads(p=>[...p,...nl]);aA('<strong>'+nl.length+' leads</strong> importados');sT(nl.length+' leads importados!')};
 
   const mt=useMemo(()=>{
     const t=leads.length;const bS={};ST.forEach(s=>bS[s.id]=leads.filter(l=>l.status===s.id).length);
@@ -278,11 +290,11 @@ function App(){
     </div>
     <div className="main">
       {pg==='dashboard'&&<Dash m={mt} acts={acts}/>}
-      {pg==='leads'&&<Leads leads={leads} vends={vends} iL={iL} uL={uL} dL={dL} setModal={setModal} sT={sT} aA={aA} setLeads={setLeads} cfg={cfg} wpUrl={wpUrl}/>}
+      {pg==='leads'&&<Leads leads={leads} vends={vends} iL={iL} uL={uL} dL={dL} setModal={setModal} sT={sT} aA={aA} setLeads={setLeads} cfg={cfg} wpUrl={wpUrl} importSourceLeads={importSourceLeads}/>}
       {pg==='pipeline'&&<Pipe leads={leads} vends={vends} uL={uL} setModal={setModal} cfg={cfg} wpUrl={wpUrl} mt={mt}/>}
       {pg==='metas'&&<MetasP metas={metas} setMetas={setMetas} m={mt} sT={sT}/>}
       {pg==='equipe'&&<Equipe vends={vends} setVends={setVends} m={mt} sT={sT} leads={leads}/>}
-      {pg==='config'&&<Config cfg={cfg} setCfg={setCfg} sT={sT} forceSync={forceSync} importSourceLeads={importSourceLeads} syncSt={syncSt}/>}
+      {pg==='config'&&<Config cfg={cfg} setCfg={setCfg} sT={sT} forceSync={forceSync} syncSt={syncSt}/>}
     </div>
     {modal&&<div className="modal-overlay" onClick={()=>setModal(null)}><div className="modal" onClick={e=>e.stopPropagation()}>{modal}</div></div>}
     {toast&&<div className="toast">{toast}</div>}
@@ -314,9 +326,9 @@ function Dash({m,acts}){
 }
 
 // ========= LEADS =========
-function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl}){
+function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl,importSourceLeads}){
   const[sr,setSr]=useState('');const[fS,setFS]=useState('');const[fV,setFV]=useState('');const fRef=useRef();
-  const fl=useMemo(()=>leads.filter(l=>{if(fS&&l.status!==fS)return false;if(fV&&l.vendedor!==fV)return false;if(sr){const s=sr.toLowerCase();return l.nome.toLowerCase().includes(s)||l.email.toLowerCase().includes(s)||l.whatsapp.includes(s)}return true}),[leads,sr,fS,fV]);
+  const fl=useMemo(()=>leads.filter(l=>{if(fS&&l.status!==fS)return false;if(fV&&l.vendedor!==fV)return false;if(sr){const s=String(sr||'').toLowerCase();return String(l.nome||'').toLowerCase().includes(s)||String(l.email||'').toLowerCase().includes(s)||String(l.whatsapp||'').includes(s)}return true}),[leads,sr,fS,fV]);
   const hF=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>iL(r.data)})};
   const oA=()=>{let n='',e='',w='',v='',vl=cfg.valorPadrao||50;setModal(<div><h3>Adicionar Lead</h3><div className="form-group"><label>Nome</label><input onChange={ev=>n=ev.target.value} placeholder="Nome completo"/></div><div className="form-group"><label>Email</label><input type="email" onChange={ev=>e=ev.target.value}/></div><div className="form-group"><label>WhatsApp</label><input onChange={ev=>w=ev.target.value} placeholder="(11) 99999-9999"/></div><div className="form-group"><label>Vendedor</label><select onChange={ev=>v=ev.target.value}><option value="">Sem atribuição</option>{vends.map(vd=><option key={vd.id} value={vd.id}>{vd.nome}</option>)}</select></div><div className="form-group"><label>Valor da Matrícula</label><select defaultValue={vl} onChange={ev=>vl=Number(ev.target.value)}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div><div className="modal-actions"><button className="btn btn-outline" onClick={()=>setModal(null)}>Cancelar</button><button className="btn btn-gold" onClick={()=>{if(!n.trim())return sT('Nome obrigatório');setLeads(p=>[{id:gid(),nome:n.trim(),email:e.trim(),whatsapp:w.trim(),status:'novo',vendedor:v,valor:vl,notas:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),dataContato:null,dataMatricula:null},...p]);aA('Lead <strong>'+n+'</strong> adicionado');sT('Lead adicionado!');setModal(null)}}>Adicionar</button></div></div>)};
   const oD=lead=>{setModal(<Det lead={lead} vends={vends} uL={uL} dL={dL} setModal={setModal} sT={sT} wpUrl={wpUrl}/>)};
@@ -324,12 +336,12 @@ function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl}){
   const dist=()=>{if(!vends.length)return sT('Adicione vendedores');const s=leads.filter(l=>!l.vendedor);if(!s.length)return sT('Todos já têm vendedor');let i=0;setLeads(p=>p.map(l=>{if(l.vendedor)return l;const v=vends[i%vends.length];i++;return{...l,vendedor:v.id,updatedAt:new Date().toISOString()}}));aA('<strong>'+s.length+' leads</strong> distribuídos');sT(s.length+' leads distribuídos!')};
   return(<div>
     <div className="page-header"><div><div className="page-title">Leads</div><div className="page-subtitle">{leads.length} leads · {fl.length} exibidos</div></div>
-    <div style={{display:'flex',gap:6,flexWrap:'wrap'}}><button className="btn btn-outline" onClick={eC}>Exportar</button><button className="btn btn-outline" onClick={dist}>Distribuir</button><button className="btn btn-outline" onClick={oA}>+ Novo</button><button className="btn btn-gold" onClick={()=>fRef.current.click()}>Importar CSV</button><input ref={fRef} type="file" accept=".csv,.txt" hidden onChange={hF}/></div></div>
+    <div style={{display:'flex',gap:6,flexWrap:'wrap'}}><button className="btn btn-outline" onClick={eC}>Exportar</button><button className="btn btn-outline" onClick={dist}>Distribuir</button><button className="btn btn-outline" onClick={oA}>+ Novo</button><button className="btn btn-outline" onClick={importSourceLeads}>Importar da Planilha</button><button className="btn btn-gold" onClick={()=>fRef.current.click()}>Importar CSV</button><input ref={fRef} type="file" accept=".csv,.txt" hidden onChange={hF}/></div></div>
     {leads.length===0?(<div className="import-area" onClick={()=>fRef.current.click()} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f)Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>iL(r.data)})}}><div style={{fontSize:'1.8rem',marginBottom:10,color:'var(--gd)'}}>📄</div><div style={{fontSize:'.95rem',fontWeight:600,color:'var(--nv)'}}>Importe sua planilha</div><div style={{color:'var(--tx2)',fontSize:'.82rem'}}>Arraste um CSV ou clique para selecionar</div></div>
     ):(<div className="table-wrap"><div className="table-header"><div className="table-filters"><div style={{position:'relative'}}><input placeholder="Buscar..." value={sr} onChange={e=>setSr(e.target.value)} style={{paddingLeft:30,width:200}}/></div><select value={fS} onChange={e=>setFS(e.target.value)}><option value="">Todos status</option>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select><select value={fV} onChange={e=>setFV(e.target.value)}><option value="">Todos vendedores</option>{vends.map(v=><option key={v.id} value={v.id}>{v.nome}</option>)}</select></div></div>
     <div style={{overflowX:'auto'}}><table><thead><tr><th>Nome</th><th>WhatsApp</th><th>Status</th><th>Valor</th><th>Vendedor</th><th>Criado</th><th>Ações</th></tr></thead><tbody>
-      {fl.slice(0,100).map(l=>{const st=sI(l.status);const wl=wpUrl(l.whatsapp);return <tr key={l.id}><td><span className="lead-name" onClick={()=>oD(l)}>{l.nome||'—'}</span></td>
-      <td>{wl?<a className="lead-whatsapp" href={wl} target="_blank" rel="noopener">{l.whatsapp}</a>:(l.whatsapp||'—')}</td>
+      {fl.slice(0,100).map(l=>{const st=sI(l.status);const wl=wpUrl(l.whatsapp);return <tr key={l.id}><td><span className="lead-name" onClick={()=>oD(l)}>{String(l.nome||'')||'—'}</span></td>
+      <td>{wl?<a className="lead-whatsapp" href={wl} target="_blank" rel="noopener">{String(l.whatsapp||'')}</a>:(String(l.whatsapp||'')||'—')}</td>
       <td><select value={l.status} onChange={e=>uL(l.id,{status:e.target.value})} style={{background:st.b,color:st.c,border:'none',fontSize:'.72rem',fontWeight:600,padding:'3px 7px',borderRadius:5,cursor:'pointer'}}>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select></td>
       <td><select value={l.valor||50} onChange={e=>uL(l.id,{valor:Number(e.target.value)})} style={{background:'transparent',border:'1px solid var(--bd)',fontSize:'.76rem',padding:'2px 6px',borderRadius:4,cursor:'pointer',color:'var(--gd)',fontWeight:600}}><option value={50}>R$50</option><option value={70}>R$70</option></select></td>
       <td><select value={l.vendedor||''} onChange={e=>uL(l.id,{vendedor:e.target.value})} style={{background:'transparent',border:'none',color:'var(--tx2)',fontSize:'.78rem',cursor:'pointer'}}><option value="">—</option>{vends.map(v=><option key={v.id} value={v.id}>{v.nome}</option>)}</select></td>
@@ -346,8 +358,8 @@ function Det({lead,vends,uL,dL,setModal,sT,wpUrl}){
   return(<div>
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}><div><h3 style={{marginBottom:4}}>{lead.nome||'Lead'}</h3><span className={'badge '+lead.status}>{st.l}</span><span style={{marginLeft:8,fontSize:'.82rem',fontWeight:600,color:'var(--gd)'}}>R$ {lead.valor||50},00</span></div><button className="btn btn-sm btn-outline" onClick={()=>setModal(null)}>✕</button></div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,margin:'16px 0'}}>
-      <div><label style={{fontSize:'.68rem',color:'var(--tx3)',textTransform:'uppercase',letterSpacing:1}}>Email</label><div style={{fontSize:'.85rem',marginTop:1}}>{lead.email||'—'}</div></div>
-      <div><label style={{fontSize:'.68rem',color:'var(--tx3)',textTransform:'uppercase',letterSpacing:1}}>WhatsApp</label><div style={{marginTop:1}}>{wl?<a href={wl} target="_blank" rel="noopener" style={{color:'var(--gn)',textDecoration:'none',fontSize:'.85rem'}}>{lead.whatsapp} ↗</a>:<span style={{fontSize:'.85rem'}}>{lead.whatsapp||'—'}</span>}</div></div>
+      <div><label style={{fontSize:'.68rem',color:'var(--tx3)',textTransform:'uppercase',letterSpacing:1}}>Email</label><div style={{fontSize:'.85rem',marginTop:1}}>{String(lead.email||'')||'—'}</div></div>
+      <div><label style={{fontSize:'.68rem',color:'var(--tx3)',textTransform:'uppercase',letterSpacing:1}}>WhatsApp</label><div style={{marginTop:1}}>{wl?<a href={wl} target="_blank" rel="noopener" style={{color:'var(--gn)',textDecoration:'none',fontSize:'.85rem'}}>{String(lead.whatsapp||'')} ↗</a>:<span style={{fontSize:'.85rem'}}>{String(lead.whatsapp||'')||'—'}</span>}</div></div>
     </div>
     <div className="form-group"><label>Status</label><select value={lead.status} onChange={e=>uL(lead.id,{status:e.target.value})}>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select></div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
@@ -373,7 +385,7 @@ function Pipe({leads,vends,uL,setModal,cfg,wpUrl,mt}){
     <div className="pipeline">{ST.map(s=>{const cl=leads.filter(l=>l.status===s.id);const rev=cl.reduce((sum,l)=>sum+(Number(l.valor)||50),0);return <div className="pipeline-col" key={s.id} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={e=>handleDrop(e,s.id)}>
       <div className="pipeline-col-header"><div><div className="pipeline-col-title" style={{color:s.c}}>{s.l}</div>{s.id==='matriculado'&&<div className="pipeline-col-revenue">{fR(rev)}</div>}</div><div className="pipeline-col-count" style={{background:s.b,color:s.c}}>{cl.length}</div></div>
       <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl}/>)}>
-        <div className="pipeline-card-name">{l.nome||'—'}</div>
+        <div className="pipeline-card-name">{String(l.nome||'')||'—'}</div>
         <div className="pipeline-card-info">{vd?.nome||'Sem vendedor'} · {fD(l.createdAt)}</div>
         <div className="pipeline-card-valor">R$ {l.valor||50},00</div>
         {wl&&<a href={wl} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()} style={{fontSize:'.68rem',color:'var(--gn)',textDecoration:'none',marginTop:4,display:'inline-block'}}>WhatsApp ↗</a>}
@@ -415,7 +427,7 @@ function Equipe({vends,setVends,m,sT,leads}){
 }
 
 // ========= CONFIGURAÇÕES =========
-function Config({cfg,setCfg,sT,forceSync,importSourceLeads,syncSt}){
+function Config({cfg,setCfg,sT,forceSync,syncSt}){
   const[msg,setMsg]=useState(cfg.whatsappMsg||'');
   const[url,setUrl]=useState(cfg.apiUrl||'');
   const[vp,setVp]=useState(cfg.valorPadrao||50);
@@ -438,7 +450,7 @@ function Config({cfg,setCfg,sT,forceSync,importSourceLeads,syncSt}){
           <strong>Status:</strong> {syncSt==='synced'?'✅ Conectado e sincronizado':syncSt==='syncing'?'⏳ Sincronizando...':syncSt==='error'?'❌ Erro na conexão':'📱 Dados salvos apenas neste navegador'}
         </div>
         <div className="form-group"><label>URL do Google Apps Script</label><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"/></div>
-        <div style={{display:'flex',gap:8,marginTop:8,flexWrap:'wrap'}}><button className="btn btn-gold" onClick={salvar}>Salvar URL</button><button className="btn btn-outline" onClick={forceSync}>Sincronizar Agora</button><button className="btn btn-outline" onClick={importSourceLeads}>Importar Leads da Planilha</button></div>
+        <div style={{display:'flex',gap:8,marginTop:8}}><button className="btn btn-gold" onClick={salvar}>Salvar URL</button><button className="btn btn-outline" onClick={forceSync}>Sincronizar Agora</button></div>
         <div style={{marginTop:20,padding:16,background:'var(--gdd)',borderRadius:10,fontSize:'.78rem',color:'var(--nv)'}}>
           <strong style={{color:'var(--gd)'}}>Como configurar:</strong><br/><br/>
           1. Abra <strong>script.google.com</strong><br/>
@@ -447,7 +459,7 @@ function Config({cfg,setCfg,sT,forceSync,importSourceLeads,syncSt}){
           4. Clique em Implantar → Nova implantação<br/>
           5. Tipo: App da Web / Quem acessa: Qualquer pessoa<br/>
           6. Copie a URL e cole aqui<br/><br/>
-          <strong>Pronto!</strong> Os dados ficam salvos na planilha do Google e acessíveis por qualquer navegador/dispositivo.<br/><br/>Use <strong>Importar Leads da Planilha</strong> para puxar novamente os contatos da sua base externa.
+          <strong>Pronto!</strong> Os dados ficam salvos na planilha do Google e acessíveis por qualquer navegador/dispositivo.
         </div>
       </div>
     </div>
