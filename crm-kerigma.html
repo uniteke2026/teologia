@@ -155,10 +155,12 @@ function wR(){const d=new Date(),s=new Date(d);s.setDate(d.getDate()-d.getDay())
 function mN(){return new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}
 function getPrimeiroNome(nome){return String(nome||'').trim().split(/\s+/)[0]||''}
 function personalizarMensagem(msg,lead){const primeiroNome=getPrimeiroNome(lead?.nome);return String(msg||'').replace(/\{\{\s*primeiroNome\s*\}\}/gi,primeiroNome)}
+const DEFAULT_API_URL='https://script.google.com/macros/s/AKfycby6EmvZ7Izwupvm6CbPs6mFFnlHGmbN3yRLtN8S2KVh7NmPhvShx8VJ_i2oU1wUzlGejw/exec';
+const DEFAULT_WHATSAPP_MSG='Olá, {{primeiroNome}}! Sou da Universidade Teológica Kerigma. Gostaria de conversar sobre nossa formação teológica. Posso te ajudar?';
 
 // ========= SYNC ENGINE =========
 const API={
-  url:null,
+  url:DEFAULT_API_URL,
   async fetch(){if(!this.url)return null;try{const sep=this.url.includes('?')?'&':'?';const r=await fetch(this.url+sep+'action=getAll&_='+Date.now(),{cache:'no-store'});const d=await r.json();return d.success?d.data:null}catch{return null}},
   async post(body){if(!this.url)return null;try{const r=await fetch(this.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return await r.json()}catch{return null}},
   async sync(data){return this.post({action:'syncAll',data})},
@@ -172,11 +174,12 @@ function App(){
   const[vends,setVends]=useState(()=>ld('vends',[{id:'gabriel',nome:'Gabriel Ribeiro'}]));
   const[metas,setMetas]=useState(()=>ld('metas',{semanal:{},mensal:{}}));
   const[acts,setActs]=useState(()=>ld('acts',[]));
-  const[cfg,setCfg]=useState(()=>ld('cfg',{whatsappMsg:'Olá! Sou da Universidade Teológica Kerigma. Gostaria de conversar sobre nossa formação teológica. Posso te ajudar?',apiUrl:'',valorPadrao:50}));
+  const[cfg,setCfg]=useState(()=>{const saved=ld('cfg',{});return{whatsappMsg:saved.whatsappMsg||DEFAULT_WHATSAPP_MSG,apiUrl:saved.apiUrl||DEFAULT_API_URL,valorPadrao:Number(saved.valorPadrao)||50}});
   const[toast,setToast]=useState(null);
   const[modal,setModal]=useState(null);
-  const[syncSt,setSyncSt]=useState('local');// local|syncing|synced|error
+  const[syncSt,setSyncSt]=useState('syncing');// syncing|synced|error
   const syncTimer=useRef(null);
+  const saveTimer=useRef(null);
   const dirty=useRef(false);
   const hydrating=useRef(false);
   const latest=useRef({leads:[],vends:[],metas:{semanal:{},mensal:{}},cfg:{}});
@@ -189,7 +192,7 @@ function App(){
   useEffect(()=>{sv('vends',vends);if(!hydrating.current)dirty.current=true},[vends]);
   useEffect(()=>{sv('metas',metas);if(!hydrating.current)dirty.current=true},[metas]);
   useEffect(()=>{sv('acts',acts)},[acts]);
-  useEffect(()=>{sv('cfg',cfg);API.url=cfg.apiUrl||null},[cfg]);
+  useEffect(()=>{sv('cfg',cfg);API.url=cfg.apiUrl||DEFAULT_API_URL},[cfg]);
   useEffect(()=>{latest.current={leads,vends,metas,cfg}},[leads,vends,metas,cfg]);
 
   const applyRemoteData=useCallback((data)=>{
@@ -217,8 +220,7 @@ function App(){
 
   // Sync with Google Sheets
   useEffect(()=>{
-    API.url=cfg.apiUrl||null;
-    if(!API.url){setSyncSt('local');return}
+    API.url=cfg.apiUrl||DEFAULT_API_URL;
     setSyncSt('syncing');
     API.fetch().then(data=>{
       if(data){applyRemoteData(data);setSyncSt('synced')}else setSyncSt('error');
@@ -234,9 +236,21 @@ function App(){
     return()=>clearInterval(syncTimer.current);
   },[cfg.apiUrl,applyRemoteData]);
 
+  useEffect(()=>{
+    if(hydrating.current||!API.url||!dirty.current)return;
+    clearTimeout(saveTimer.current);
+    saveTimer.current=setTimeout(()=>{
+      const cur=latest.current;
+      setSyncSt('syncing');
+      API.sync({leads:cur.leads,vendedores:cur.vends,config:{whatsappMsg:cur.cfg.whatsappMsg,metaSemanal:cur.metas.semanal,metaMensal:cur.metas.mensal,valorPadrao:cur.cfg.valorPadrao}}).then(r=>{
+        if(r?.success){setSyncSt('synced');dirty.current=false}else setSyncSt('error');
+      });
+    },1500);
+    return()=>clearTimeout(saveTimer.current);
+  },[leads,vends,metas,cfg]);
+
   // Force sync
   const forceSync=useCallback(()=>{
-    if(!API.url)return sT('Configure a URL da API primeiro');
     setSyncSt('syncing');
     API.sync({leads,vendedores:vends,config:{whatsappMsg:cfg.whatsappMsg,metaSemanal:metas.semanal,metaMensal:metas.mensal,valorPadrao:cfg.valorPadrao}}).then(r=>{
       if(r?.success){setSyncSt('synced');dirty.current=false;sT('Sincronizado!')}else{setSyncSt('error');sT('Erro ao sincronizar')}
@@ -244,7 +258,6 @@ function App(){
   },[leads,vends,metas,cfg]);
 
   const importSourceLeads=useCallback(()=>{
-    if(!API.url)return sT('Configure a URL da API primeiro');
     setSyncSt('syncing');
     API.importSource().then(r=>{
       if(!r?.success){setSyncSt('error');sT('Erro ao importar leads');return}
@@ -289,7 +302,7 @@ function App(){
     <div className="sidebar">
       <div className="logo"><img src={LOGO_URL} alt="K" onError={e=>{e.target.style.display='none'}}/><div className="logo-text"><div className="brand">KERIGMA</div><div className="brand-sub">CRM de Vendas</div></div></div>
       <nav><div className="nav-section">Menu</div>{pages.map(p=><div key={p.id} className={'nav-item '+(pg===p.id?'active':'')} onClick={()=>setPg(p.id)}>{icons[p.i]}<span>{p.l}</span></div>)}</nav>
-      <div className="sync-status" style={{color:syncSt==='synced'?'#22c55e':syncSt==='error'?'#ef4444':syncSt==='syncing'?'#f59e0b':'rgba(255,255,255,.35)'}}><span className="sync-dot" style={{background:'currentColor'}}></span><span>{syncSt==='synced'?'Sincronizado':syncSt==='syncing'?'Sincronizando...':syncSt==='error'?'Erro de sync':'Dados locais'}</span></div>
+      <div className="sync-status" style={{color:syncSt==='synced'?'#22c55e':syncSt==='error'?'#ef4444':syncSt==='syncing'?'#f59e0b':'rgba(255,255,255,.35)'}}><span className="sync-dot" style={{background:'currentColor'}}></span><span>{syncSt==='synced'?'Sincronizado':syncSt==='syncing'?'Sincronizando...':'Erro de sync'}</span></div>
       <div className="sidebar-footer">Universidade Kerigma © 2026</div>
     </div>
     <div className="main">
@@ -335,7 +348,7 @@ function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl,importSou
   const fl=useMemo(()=>leads.filter(l=>{if(fS&&l.status!==fS)return false;if(fV&&l.vendedor!==fV)return false;if(sr){const s=String(sr||'').toLowerCase();return String(l.nome||'').toLowerCase().includes(s)||String(l.email||'').toLowerCase().includes(s)||String(l.whatsapp||'').includes(s)}return true}),[leads,sr,fS,fV]);
   const hF=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>iL(r.data)})};
   const oA=()=>{let n='',e='',w='',v='',vl=cfg.valorPadrao||50;setModal(<div><h3>Adicionar Lead</h3><div className="form-group"><label>Nome</label><input onChange={ev=>n=ev.target.value} placeholder="Nome completo"/></div><div className="form-group"><label>Email</label><input type="email" onChange={ev=>e=ev.target.value}/></div><div className="form-group"><label>WhatsApp</label><input onChange={ev=>w=ev.target.value} placeholder="(11) 99999-9999"/></div><div className="form-group"><label>Vendedor</label><select onChange={ev=>v=ev.target.value}><option value="">Sem atribuição</option>{vends.map(vd=><option key={vd.id} value={vd.id}>{vd.nome}</option>)}</select></div><div className="form-group"><label>Valor da Matrícula</label><select defaultValue={vl} onChange={ev=>vl=Number(ev.target.value)}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div><div className="modal-actions"><button className="btn btn-outline" onClick={()=>setModal(null)}>Cancelar</button><button className="btn btn-gold" onClick={()=>{if(!n.trim())return sT('Nome obrigatório');setLeads(p=>[{id:gid(),nome:n.trim(),email:e.trim(),whatsapp:w.trim(),status:'novo',vendedor:v,valor:vl,notas:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),dataContato:null,dataMatricula:null},...p]);aA('Lead <strong>'+n+'</strong> adicionado');sT('Lead adicionado!');setModal(null)}}>Adicionar</button></div></div>)};
-  const oD=lead=>{setModal(<Det lead={lead} vends={vends} uL={uL} dL={dL} setModal={setModal} sT={sT} wpUrl={wpUrl}/>)};
+  const oD=lead=>{setModal(<Det lead={lead} vends={vends} uL={uL} dL={dL} setModal={setModal} sT={sT} wpUrl={wpUrl} cfg={cfg}/>)};
   const eC=()=>{const csv=Papa.unparse(leads.map(l=>({Nome:l.nome,Email:l.email,WhatsApp:l.whatsapp,Status:l.status,Vendedor:vends.find(v=>v.id===l.vendedor)?.nome||'',Valor:l.valor,Criado:fD(l.createdAt)})));const b=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='leads_kerigma.csv';a.click();sT('Exportado!')};
   const dist=()=>{if(!vends.length)return sT('Adicione vendedores');const s=leads.filter(l=>!l.vendedor);if(!s.length)return sT('Todos já têm vendedor');let i=0;setLeads(p=>p.map(l=>{if(l.vendedor)return l;const v=vends[i%vends.length];i++;return{...l,vendedor:v.id,updatedAt:new Date().toISOString()}}));aA('<strong>'+s.length+' leads</strong> distribuídos');sT(s.length+' leads distribuídos!')};
   return(<div>
@@ -356,7 +369,7 @@ function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl,importSou
 }
 
 // ========= LEAD DETAIL =========
-function Det({lead,vends,uL,dL,setModal,sT,wpUrl}){
+function Det({lead,vends,uL,dL,setModal,sT,wpUrl,cfg}){
   const[nt,setNt]=useState('');const st=sI(lead.status);const wl=wpUrl(lead.whatsapp,cfg.whatsappMsg,lead);
   const aN=()=>{if(!nt.trim())return;uL(lead.id,{notas:[{text:nt.trim(),date:new Date().toISOString()},...(lead.notas||[])]});setNt('');sT('Nota salva')};
   return(<div>
@@ -388,7 +401,7 @@ function Pipe({leads,vends,uL,setModal,cfg,wpUrl,mt}){
     <div style={{fontSize:'.82rem',color:'var(--gd)',fontWeight:600}}>Receita total: {fR(mt.revTotal)}</div></div>
     <div className="pipeline">{ST.map(s=>{const cl=leads.filter(l=>l.status===s.id);const rev=cl.reduce((sum,l)=>sum+(Number(l.valor)||50),0);return <div className="pipeline-col" key={s.id} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={e=>handleDrop(e,s.id)}>
       <div className="pipeline-col-header"><div><div className="pipeline-col-title" style={{color:s.c}}>{s.l}</div><div className="pipeline-col-revenue" style={{fontSize:'.82rem',fontWeight:700,marginTop:4,color:'var(--gd)'}}>Acumulado: {fR(rev)}</div></div><div className="pipeline-col-count" style={{background:s.b,color:s.c}}>{cl.length}</div></div>
-      <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp,cfg.whatsappMsg,l);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl}/>)}>
+      <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp,cfg.whatsappMsg,l);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl} cfg={cfg}/>)}>
         <div className="pipeline-card-name">{String(l.nome||'')||'—'}</div>
         <div className="pipeline-card-info">{vd?.nome||'Sem vendedor'} · {fD(l.createdAt)}</div>
         <div className="pipeline-card-valor">R$ {l.valor||50},00</div>
@@ -432,17 +445,17 @@ function Equipe({vends,setVends,m,sT,leads}){
 
 // ========= CONFIGURAÇÕES =========
 function Config({cfg,setCfg,sT,forceSync,syncSt}){
-  const[msg,setMsg]=useState(cfg.whatsappMsg||'');
-  const[url,setUrl]=useState(cfg.apiUrl||'');
+  const[msg,setMsg]=useState(cfg.whatsappMsg||DEFAULT_WHATSAPP_MSG);
+  const[url,setUrl]=useState(cfg.apiUrl||DEFAULT_API_URL);
   const[vp,setVp]=useState(cfg.valorPadrao||50);
-  const salvar=()=>{setCfg({...cfg,whatsappMsg:msg,apiUrl:url.trim(),valorPadrao:Number(vp)});sT('Configurações salvas!')};
+  const salvar=()=>{setCfg({...cfg,whatsappMsg:msg||DEFAULT_WHATSAPP_MSG,apiUrl:url.trim()||DEFAULT_API_URL,valorPadrao:Number(vp)});sT('Configurações salvas!')};
   return(<div><div className="page-header"><div><div className="page-title">Configurações</div><div className="page-subtitle">Mensagem do WhatsApp, sincronização e valores</div></div></div>
     <div className="grid-2">
       <div className="card" style={{padding:24}}>
-        <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Mensagem do WhatsApp</h3>
-        <div className="form-group"><label>Mensagem padrão ao clicar no botão WhatsApp</label><textarea value={msg} onChange={e=>setMsg(e.target.value)} style={{minHeight:100}} placeholder="Olá! Sou da Universidade Teológica Kerigma..."/></div>
+        <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Mensagem do WhatsApp</h3><div style={{fontSize:'.74rem',color:'var(--tx2)',marginBottom:12}}>Você pode usar <strong>{'{{primeiroNome}}'}</strong> para personalizar automaticamente a mensagem.</div>
+        <div className="form-group"><label>Mensagem padrão ao clicar no botão WhatsApp</label><textarea value={msg} onChange={e=>setMsg(e.target.value)} style={{minHeight:100}} placeholder="Olá, {{primeiroNome}}! Sou da Universidade Teológica Kerigma..."/></div>
         <div style={{padding:12,background:'var(--sf)',borderRadius:8,fontSize:'.78rem',color:'var(--tx2)',marginBottom:14}}>
-          <strong>Pré-visualização:</strong><br/><span style={{color:'var(--gn)'}}>{personalizarMensagem(msg||'(vazio)',{nome:'João'})}</span>
+          <strong>Pré-visualização:</strong><br/><span style={{color:'var(--gn)'}}>{personalizarMensagem(msg||DEFAULT_WHATSAPP_MSG,{nome:'João Silva'})}</span>
         </div>
         <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:14,marginTop:20}}>Valor Padrão</h3>
         <div className="form-group"><label>Valor padrão para novos leads</label><select value={vp} onChange={e=>setVp(Number(e.target.value))}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div>
@@ -451,9 +464,9 @@ function Config({cfg,setCfg,sT,forceSync,syncSt}){
       <div className="card" style={{padding:24}}>
         <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Sincronização (Google Sheets)</h3>
         <div style={{padding:14,background:syncSt==='synced'?'var(--gnd)':syncSt==='error'?'var(--rdd)':'var(--sf)',borderRadius:10,marginBottom:16,fontSize:'.82rem'}}>
-          <strong>Status:</strong> {syncSt==='synced'?'✅ Conectado e sincronizado':syncSt==='syncing'?'⏳ Sincronizando...':syncSt==='error'?'❌ Erro na conexão':'📱 Dados salvos apenas neste navegador'}
+          <strong>Status:</strong> {syncSt==='synced'?'✅ Conectado e sincronizado':syncSt==='syncing'?'⏳ Sincronizando...':'❌ Erro na conexão'}
         </div>
-        <div className="form-group"><label>URL do Google Apps Script</label><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"/></div>
+        <div className="form-group"><label>URL do Google Apps Script</label><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"/></div><div style={{fontSize:'.74rem',color:'var(--tx2)',marginTop:-4,marginBottom:12}}>Essa URL já vai preenchida no CRM para funcionar em qualquer navegador. Só altere se publicar uma nova implantação do Apps Script.</div>
         <div style={{display:'flex',gap:8,marginTop:8}}><button className="btn btn-gold" onClick={salvar}>Salvar URL</button><button className="btn btn-outline" onClick={forceSync}>Sincronizar Agora</button></div>
         <div style={{marginTop:20,padding:16,background:'var(--gdd)',borderRadius:10,fontSize:'.78rem',color:'var(--nv)'}}>
           <strong style={{color:'var(--gd)'}}>Como configurar:</strong><br/><br/>
