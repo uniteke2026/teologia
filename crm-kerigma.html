@@ -153,6 +153,8 @@ function wK(){const d=new Date(),s=new Date(d);s.setDate(d.getDate()-d.getDay())
 function mK(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)}
 function wR(){const d=new Date(),s=new Date(d);s.setDate(d.getDate()-d.getDay());const e=new Date(s);e.setDate(s.getDate()+6);return s.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' — '+e.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}
 function mN(){return new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}
+function getPrimeiroNome(nome){return String(nome||'').trim().split(/\s+/)[0]||''}
+function personalizarMensagem(msg,lead){const primeiroNome=getPrimeiroNome(lead?.nome);return String(msg||'').replace(/\{\{\s*primeiroNome\s*\}\}/gi,primeiroNome)}
 
 // ========= SYNC ENGINE =========
 const API={
@@ -253,7 +255,7 @@ function App(){
     });
   },[applyRemoteData]);
 
-  const wpUrl=(num,msg)=>{const n=String(num||'').replace(/\D/g,'');if(!n)return'';const full=n.startsWith('55')?n:'55'+n;const m=encodeURIComponent(msg||cfg.whatsappMsg||'');return'https://wa.me/'+full+(m?'?text='+m:'')};
+  const wpUrl=(num,msg,lead)=>{const n=String(num||'').replace(/\D/g,'');if(!n)return'';const full=n.startsWith('55')?n:'55'+n;const texto=personalizarMensagem(msg||cfg.whatsappMsg||'',lead);const m=encodeURIComponent(texto);return'https://wa.me/'+full+(m?'?text='+m:'')};
 
   const uL=(id,up)=>{setLeads(p=>p.map(l=>{if(l.id!==id)return l;const u={...l,...up,updatedAt:new Date().toISOString()};if(up.status&&up.status!==l.status){aA('<strong>'+l.nome+'</strong> → <strong>'+sI(up.status).l+'</strong>');if(up.status==='matriculado')u.dataMatricula=new Date().toISOString();if(up.status==='contatado'&&!l.dataContato)u.dataContato=new Date().toISOString()}return u}))};
   const dL=id=>{const l=leads.find(x=>x.id===id);if(l)aA('Lead <strong>'+l.nome+'</strong> removido');setLeads(p=>p.filter(x=>x.id!==id))};
@@ -342,7 +344,7 @@ function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl,importSou
     {leads.length===0?(<div className="import-area" onClick={()=>fRef.current.click()} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f)Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>iL(r.data)})}}><div style={{fontSize:'1.8rem',marginBottom:10,color:'var(--gd)'}}>📄</div><div style={{fontSize:'.95rem',fontWeight:600,color:'var(--nv)'}}>Importe sua planilha</div><div style={{color:'var(--tx2)',fontSize:'.82rem'}}>Arraste um CSV ou clique para selecionar</div></div>
     ):(<div className="table-wrap"><div className="table-header"><div className="table-filters"><div style={{position:'relative'}}><input placeholder="Buscar..." value={sr} onChange={e=>setSr(e.target.value)} style={{paddingLeft:30,width:200}}/></div><select value={fS} onChange={e=>setFS(e.target.value)}><option value="">Todos status</option>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select><select value={fV} onChange={e=>setFV(e.target.value)}><option value="">Todos vendedores</option>{vends.map(v=><option key={v.id} value={v.id}>{v.nome}</option>)}</select></div></div>
     <div style={{overflowX:'auto'}}><table><thead><tr><th>Nome</th><th>WhatsApp</th><th>Status</th><th>Valor</th><th>Vendedor</th><th>Criado</th><th>Ações</th></tr></thead><tbody>
-      {fl.slice(0,100).map(l=>{const st=sI(l.status);const wl=wpUrl(l.whatsapp);return <tr key={l.id}><td><span className="lead-name" onClick={()=>oD(l)}>{String(l.nome||'')||'—'}</span></td>
+      {fl.slice(0,100).map(l=>{const st=sI(l.status);const wl=wpUrl(l.whatsapp,cfg.whatsappMsg,l);return <tr key={l.id}><td><span className="lead-name" onClick={()=>oD(l)}>{String(l.nome||'')||'—'}</span></td>
       <td>{wl?<a className="lead-whatsapp" href={wl} target="_blank" rel="noopener">{String(l.whatsapp||'')}</a>:(String(l.whatsapp||'')||'—')}</td>
       <td><select value={l.status} onChange={e=>uL(l.id,{status:e.target.value})} style={{background:st.b,color:st.c,border:'none',fontSize:'.72rem',fontWeight:600,padding:'3px 7px',borderRadius:5,cursor:'pointer'}}>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select></td>
       <td><select value={l.valor||50} onChange={e=>uL(l.id,{valor:Number(e.target.value)})} style={{background:'transparent',border:'1px solid var(--bd)',fontSize:'.76rem',padding:'2px 6px',borderRadius:4,cursor:'pointer',color:'var(--gd)',fontWeight:600}}><option value={50}>R$50</option><option value={70}>R$70</option></select></td>
@@ -355,7 +357,7 @@ function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl,importSou
 
 // ========= LEAD DETAIL =========
 function Det({lead,vends,uL,dL,setModal,sT,wpUrl}){
-  const[nt,setNt]=useState('');const st=sI(lead.status);const wl=wpUrl(lead.whatsapp);
+  const[nt,setNt]=useState('');const st=sI(lead.status);const wl=wpUrl(lead.whatsapp,cfg.whatsappMsg,lead);
   const aN=()=>{if(!nt.trim())return;uL(lead.id,{notas:[{text:nt.trim(),date:new Date().toISOString()},...(lead.notas||[])]});setNt('');sT('Nota salva')};
   return(<div>
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}><div><h3 style={{marginBottom:4}}>{lead.nome||'Lead'}</h3><span className={'badge '+lead.status}>{st.l}</span><span style={{marginLeft:8,fontSize:'.82rem',fontWeight:600,color:'var(--gd)'}}>R$ {lead.valor||50},00</span></div><button className="btn btn-sm btn-outline" onClick={()=>setModal(null)}>✕</button></div>
@@ -386,7 +388,7 @@ function Pipe({leads,vends,uL,setModal,cfg,wpUrl,mt}){
     <div style={{fontSize:'.82rem',color:'var(--gd)',fontWeight:600}}>Receita total: {fR(mt.revTotal)}</div></div>
     <div className="pipeline">{ST.map(s=>{const cl=leads.filter(l=>l.status===s.id);const rev=cl.reduce((sum,l)=>sum+(Number(l.valor)||50),0);return <div className="pipeline-col" key={s.id} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={e=>handleDrop(e,s.id)}>
       <div className="pipeline-col-header"><div><div className="pipeline-col-title" style={{color:s.c}}>{s.l}</div><div className="pipeline-col-revenue" style={{fontSize:'.82rem',fontWeight:700,marginTop:4,color:'var(--gd)'}}>Acumulado: {fR(rev)}</div></div><div className="pipeline-col-count" style={{background:s.b,color:s.c}}>{cl.length}</div></div>
-      <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl}/>)}>
+      <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp,cfg.whatsappMsg,l);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl}/>)}>
         <div className="pipeline-card-name">{String(l.nome||'')||'—'}</div>
         <div className="pipeline-card-info">{vd?.nome||'Sem vendedor'} · {fD(l.createdAt)}</div>
         <div className="pipeline-card-valor">R$ {l.valor||50},00</div>
@@ -440,7 +442,7 @@ function Config({cfg,setCfg,sT,forceSync,syncSt}){
         <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Mensagem do WhatsApp</h3>
         <div className="form-group"><label>Mensagem padrão ao clicar no botão WhatsApp</label><textarea value={msg} onChange={e=>setMsg(e.target.value)} style={{minHeight:100}} placeholder="Olá! Sou da Universidade Teológica Kerigma..."/></div>
         <div style={{padding:12,background:'var(--sf)',borderRadius:8,fontSize:'.78rem',color:'var(--tx2)',marginBottom:14}}>
-          <strong>Pré-visualização:</strong><br/><span style={{color:'var(--gn)'}}>{msg||'(vazio)'}</span>
+          <strong>Pré-visualização:</strong><br/><span style={{color:'var(--gn)'}}>{personalizarMensagem(msg||'(vazio)',{nome:'João'})}</span>
         </div>
         <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:14,marginTop:20}}>Valor Padrão</h3>
         <div className="form-group"><label>Valor padrão para novos leads</label><select value={vp} onChange={e=>setVp(Number(e.target.value))}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div>
