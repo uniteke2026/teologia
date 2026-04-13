@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM Kerigma — Gestão de Vendas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display'),local('SFProDisplay-Regular'),local('.SFNSDisplay-Regular');font-weight:400}
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display Semibold'),local('SFProDisplay-Semibold');font-weight:600}
+@font-face{font-family:'SF Pro Display';src:local('SF Pro Display Bold'),local('SFProDisplay-Bold');font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#fff;--sf:#f7f8fa;--sf2:#eef0f4;--sf3:#e4e7ed;
+--bd:#dde1e8;--bd2:#c8cdd6;
+--nv:#0c1b33;--nv2:#1a2d4a;
+--tx:#0c1b33;--tx2:#6b7280;--tx3:#9ca3af;
+--gd:#c9a227;--gd2:#d4af37;--gdd:rgba(201,162,39,0.1);--gdd2:rgba(201,162,39,0.18);
+--gn:#16a34a;--gnd:rgba(22,163,74,0.08);--gnd2:rgba(22,163,74,0.15);
+--rd:#dc2626;--rdd:rgba(220,38,38,0.08);
+--bl:#2563eb;--bld:rgba(37,99,235,0.08);
+--pr:#7c3aed;--prd:rgba(124,58,237,0.08);
+--or:#ea580c;--ord:rgba(234,88,12,0.08);
+--cy:#0891b2;--cyd:rgba(8,145,178,0.08);
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--sf);color:var(--tx);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.brand,.page-title,.card-value,.team-name{font-family:'SF Pro Display','Inter',system-ui,sans-serif}
+.app{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--nv);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.main{margin-left:240px;flex:1;min-height:100vh;padding:28px 32px}
+.sidebar .logo{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:12px}
+.sidebar .logo img{height:40px;width:auto;filter:brightness(0) invert(1);opacity:.95}
+.sidebar .logo-text{display:flex;flex-direction:column}
+.sidebar .brand{color:#fff;font-size:1.05rem;font-weight:700;letter-spacing:1px}
+.sidebar .brand-sub{color:rgba(255,255,255,.45);font-size:.6rem;text-transform:uppercase;letter-spacing:2.5px;margin-top:1px}
+.sidebar nav{flex:1;padding:14px 10px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.55);font-size:.84rem;font-weight:500;transition:all .2s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
+.nav-item.active{background:var(--gdd2);color:var(--gd2)}
+.nav-item svg{width:18px;height:18px;flex-shrink:0}
+.nav-section{font-size:.6rem;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.3);padding:18px 14px 6px;font-weight:600}
+.sidebar-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);font-size:.68rem;color:rgba(255,255,255,.3)}
+.sync-status{padding:6px 18px;font-size:.65rem;display:flex;align-items:center;gap:6px}
+.sync-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-title{font-size:1.45rem;color:var(--nv);font-weight:700}
+.page-subtitle{font-size:.8rem;color:var(--tx2);margin-top:2px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:22px}
+.card{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:18px 20px}
+.card-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx2);font-weight:600;margin-bottom:8px}
+.card-value{font-size:1.6rem;font-weight:700;color:var(--nv)}
+.card-sub{font-size:.74rem;color:var(--tx2);margin-top:3px}
+.card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:var(--gdd);color:var(--gd)}
+.card-icon svg{width:18px;height:18px}
+.goal-section{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:18px}
+.goal-row{display:flex;align-items:center;gap:16px;margin-bottom:14px}.goal-row:last-child{margin-bottom:0}
+.goal-label{min-width:110px;font-size:.78rem;font-weight:600;color:var(--tx2)}
+.goal-bar-wrap{flex:1;background:var(--sf2);border-radius:8px;height:26px;position:relative;overflow:hidden}
+.goal-bar{height:100%;border-radius:8px;transition:width .6s;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:.7rem;font-weight:700;color:#fff;min-width:fit-content}
+.goal-bar.gold{background:linear-gradient(90deg,var(--gd),var(--gd2))}.goal-bar.green{background:linear-gradient(90deg,#16a34a,#22c55e)}.goal-bar.red{background:linear-gradient(90deg,#dc2626,#ef4444)}
+.goal-numbers{min-width:90px;text-align:right;font-size:.82rem;font-weight:600;color:var(--nv)}
+.funnel-wrap{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:22px}
+.funnel-stage{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.funnel-bar-bg{flex:1;background:var(--sf2);border-radius:6px;height:28px;overflow:hidden}
+.funnel-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:.74rem;font-weight:600;color:#fff;transition:width .5s}
+.funnel-label{min-width:95px;font-size:.78rem;color:var(--tx2);font-weight:500}
+.funnel-count{min-width:45px;text-align:right;font-weight:700;font-size:.88rem;color:var(--nv)}
+.table-wrap{background:var(--bg);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.table-header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--bd);flex-wrap:wrap;gap:10px}
+.table-filters{display:flex;gap:8px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 16px;font-size:.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--bd);background:var(--sf)}
+td{padding:10px 16px;font-size:.82rem;border-bottom:1px solid var(--bd);vertical-align:middle}
+tr:hover td{background:var(--sf)}
+.lead-name{font-weight:600;color:var(--nv);cursor:pointer}
+.lead-whatsapp{color:var(--gn);cursor:pointer;text-decoration:none;font-weight:500}
+.badge{display:inline-flex;padding:3px 9px;border-radius:6px;font-size:.7rem;font-weight:600}
+.badge.novo{background:var(--bld);color:var(--bl)}.badge.contatado{background:var(--prd);color:var(--pr)}.badge.interessado{background:var(--ord);color:var(--or)}.badge.negociando{background:var(--cyd);color:var(--cy)}.badge.matriculado{background:var(--gnd);color:var(--gn)}.badge.perdido{background:var(--rdd);color:var(--rd)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:.8rem;font-weight:600;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-gold{background:var(--gd);color:#fff}.btn-gold:hover{background:var(--gd2)}
+.btn-outline{background:var(--bg);border:1px solid var(--bd);color:var(--tx2)}.btn-outline:hover{border-color:var(--gd);color:var(--gd)}
+.btn-sm{padding:4px 9px;font-size:.72rem;border-radius:6px}
+.btn-green{background:var(--gnd2);color:var(--gn);border:1px solid rgba(22,163,74,.2)}
+.btn-red{background:var(--rdd);color:var(--rd);border:1px solid rgba(220,38,38,.15)}
+input,select,textarea{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:8px 12px;border-radius:8px;font-size:.82rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gd)}select{cursor:pointer}
+.modal-overlay{position:fixed;inset:0;background:rgba(12,27,51,.5);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal{background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:26px;max-width:520px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 50px rgba(12,27,51,.15)}
+.modal h3{font-family:'SF Pro Display','Inter',sans-serif;font-size:1.15rem;margin-bottom:16px;color:var(--nv)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:.72rem;font-weight:600;color:var(--tx2);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.form-group input,.form-group select,.form-group textarea{width:100%}
+textarea{resize:vertical;min-height:56px}
+.pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;overflow-x:auto;padding-bottom:6px}
+.pipeline-col{background:var(--bg);border:1px solid var(--bd);border-radius:10px;min-height:380px;transition:background .15s}
+.pipeline-col.drag-over{background:var(--gdd);border-color:var(--gd)}
+.pipeline-col-header{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.pipeline-col-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--nv)}
+.pipeline-col-revenue{font-size:.68rem;color:var(--gd);font-weight:600}
+.pipeline-col-count{font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:5px}
+.pipeline-cards{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:50px}
+.pipeline-card{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:10px;cursor:grab;transition:all .15s;user-select:none}
+.pipeline-card:active{cursor:grabbing}
+.pipeline-card.dragging{opacity:.4;transform:scale(.95)}
+.pipeline-card:hover{border-color:var(--gd);box-shadow:0 2px 8px rgba(201,162,39,.1)}
+.pipeline-card-name{font-weight:600;font-size:.8rem;color:var(--nv);margin-bottom:3px}
+.pipeline-card-info{font-size:.7rem;color:var(--tx2)}
+.pipeline-card-valor{font-size:.72rem;color:var(--gd);font-weight:600;margin-top:4px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.team-card{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:22px}
+.team-name{font-size:1.05rem;font-weight:700;color:var(--nv);margin-bottom:12px}
+.team-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.team-stat{text-align:center;padding:10px;background:var(--sf);border-radius:8px;border:1px solid var(--bd)}
+.team-stat-val{font-size:1.2rem;font-weight:700;color:var(--nv)}
+.team-stat-label{font-size:.65rem;color:var(--tx2);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.import-area{border:2px dashed var(--bd2);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+.import-area:hover{border-color:var(--gd);background:var(--gdd)}
+.activity-list{max-height:280px;overflow-y:auto}
+.activity-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.activity-dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex-shrink:0;background:var(--gd)}
+.activity-text{font-size:.8rem;color:var(--tx2)}.activity-text strong{color:var(--nv)}
+.activity-time{font-size:.68rem;color:var(--tx3);margin-top:1px}
+.revenue-highlight{background:linear-gradient(135deg,var(--gdd),var(--gdd2));border:1px solid rgba(201,162,39,.25)}
+.revenue-highlight .card-value{color:var(--gd)}
+@media(max-width:1024px){.sidebar{width:56px}.sidebar .brand-sub,.sidebar .nav-item span,.sidebar-footer,.sidebar .logo-text,.sync-status span{display:none}.sidebar .logo{padding:14px 8px;justify-content:center}.sidebar .logo img{height:28px}.nav-item{justify-content:center;padding:10px 8px}.main{margin-left:56px;padding:18px 14px}.pipeline{grid-template-columns:repeat(3,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}}
+@media(max-width:640px){.cards-grid{grid-template-columns:1fr 1fr}.pipeline{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr}}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--sf)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--nv);color:#fff;padding:11px 20px;border-radius:10px;font-size:.82rem;font-weight:600;z-index:600;animation:slideUp .3s;box-shadow:0 6px 20px rgba(12,27,51,.25)}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script type="text/babel">
+const {useState,useEffect,useRef,useMemo,useCallback}=React;
+const LOGO_URL="https://universidadekerigma.com.br/assets/logo.png";
+const ST=[{id:'novo',l:'Novo',c:'var(--bl)',b:'var(--bld)'},{id:'contatado',l:'Contatado',c:'var(--pr)',b:'var(--prd)'},{id:'interessado',l:'Interessado',c:'var(--or)',b:'var(--ord)'},{id:'negociando',l:'Negociando',c:'var(--cy)',b:'var(--cyd)'},{id:'matriculado',l:'Matriculado',c:'var(--gn)',b:'var(--gnd)'},{id:'perdido',l:'Perdido',c:'var(--rd)',b:'var(--rdd)'}];
+const sI=id=>ST.find(s=>s.id===id)||ST[0];
+const fR=v=>v?'R$ '+(Number(v)||0).toLocaleString('pt-BR',{minimumFractionDigits:2}):'R$ 0,00';
+function ld(k,d){try{const v=localStorage.getItem('crm_k_'+k);return v?JSON.parse(v):d}catch{return d}}
+function sv(k,v){localStorage.setItem('crm_k_'+k,JSON.stringify(v))}
+function gid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,6)}
+function fD(d){if(!d)return'—';return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}
+function fDT(d){if(!d)return'—';return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function wK(){const d=new Date(),s=new Date(d);s.setDate(d.getDate()-d.getDay());return s.toISOString().split('T')[0]}
+function mK(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)}
+function wR(){const d=new Date(),s=new Date(d);s.setDate(d.getDate()-d.getDay());const e=new Date(s);e.setDate(s.getDate()+6);return s.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' — '+e.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}
+function mN(){return new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}
+
+// ========= SYNC ENGINE =========
+const API={
+  url:null,
+  async fetch(){if(!this.url)return null;try{const sep=this.url.includes('?')?'&':'?';const r=await fetch(this.url+sep+'action=getAll&_='+Date.now(),{cache:'no-store'});const d=await r.json();return d.success?d.data:null}catch{return null}},
+  async post(body){if(!this.url)return null;try{const r=await fetch(this.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return await r.json()}catch{return null}},
+  async sync(data){return this.post({action:'syncAll',data})},
+  async act(text){return this.post({action:'addActivity',text})},
+  async importSource(){return this.post({action:'importSourceLeads'})}
+};
+
+function App(){
+  const[pg,setPg]=useState('dashboard');
+  const[leads,setLeads]=useState(()=>ld('leads',[]));
+  const[vends,setVends]=useState(()=>ld('vends',[{id:'gabriel',nome:'Gabriel Ribeiro'}]));
+  const[metas,setMetas]=useState(()=>ld('metas',{semanal:{},mensal:{}}));
+  const[acts,setActs]=useState(()=>ld('acts',[]));
+  const[cfg,setCfg]=useState(()=>ld('cfg',{whatsappMsg:'Olá! Sou da Universidade Teológica Kerigma. Gostaria de conversar sobre nossa formação teológica. Posso te ajudar?',apiUrl:'',valorPadrao:50}));
+  const[toast,setToast]=useState(null);
+  const[modal,setModal]=useState(null);
+  const[syncSt,setSyncSt]=useState('local');// local|syncing|synced|error
+  const syncTimer=useRef(null);
+  const dirty=useRef(false);
+  const hydrating=useRef(false);
+  const latest=useRef({leads:[],vends:[],metas:{semanal:{},mensal:{}},cfg:{}});
+
+  const sT=m=>{setToast(m);setTimeout(()=>setToast(null),3000)};
+  const aA=t=>{setActs(p=>[{id:gid(),text:t,date:new Date().toISOString()},...p].slice(0,100));if(API.url)API.act(t)};
+
+  // Persist to localStorage
+  useEffect(()=>{sv('leads',leads);if(!hydrating.current)dirty.current=true},[leads]);
+  useEffect(()=>{sv('vends',vends);if(!hydrating.current)dirty.current=true},[vends]);
+  useEffect(()=>{sv('metas',metas);if(!hydrating.current)dirty.current=true},[metas]);
+  useEffect(()=>{sv('acts',acts)},[acts]);
+  useEffect(()=>{sv('cfg',cfg);API.url=cfg.apiUrl||null},[cfg]);
+  useEffect(()=>{latest.current={leads,vends,metas,cfg}},[leads,vends,metas,cfg]);
+
+  const applyRemoteData=useCallback((data)=>{
+    hydrating.current=true;
+    setLeads(Array.isArray(data?.leads)?data.leads.map(l=>({...l,valor:Number(l.valor)||cfg.valorPadrao||50,notas:Array.isArray(l.notas)?l.notas:[]})):[]);
+    setVends(Array.isArray(data?.vendedores)&&data.vendedores.length?data.vendedores:[{id:'gabriel',nome:'Gabriel Ribeiro'}]);
+    if(data?.config){
+      const ms=data.config.metaSemanal||{};
+      const mm=data.config.metaMensal||{};
+      setMetas({semanal:ms,mensal:mm});
+      setCfg(p=>({...p,whatsappMsg:data.config.whatsappMsg||p.whatsappMsg,valorPadrao:Number(data.config.valorPadrao)||p.valorPadrao}));
+    }
+    setActs(Array.isArray(data?.atividades)?data.atividades:[]);
+    setTimeout(()=>{hydrating.current=false;dirty.current=false},0);
+  },[cfg.valorPadrao]);
+
+  // Sync with Google Sheets
+  useEffect(()=>{
+    API.url=cfg.apiUrl||null;
+    if(!API.url){setSyncSt('local');return}
+    setSyncSt('syncing');
+    API.fetch().then(data=>{
+      if(data){applyRemoteData(data);setSyncSt('synced')}else setSyncSt('error');
+    });
+    syncTimer.current=setInterval(()=>{
+      if(!dirty.current||!API.url)return;
+      const cur=latest.current;
+      setSyncSt('syncing');
+      API.sync({leads:cur.leads,vendedores:cur.vends,config:{whatsappMsg:cur.cfg.whatsappMsg,metaSemanal:cur.metas.semanal,metaMensal:cur.metas.mensal,valorPadrao:cur.cfg.valorPadrao}}).then(r=>{
+        if(r?.success){setSyncSt('synced');dirty.current=false}else setSyncSt('error');
+      });
+    },30000);
+    return()=>clearInterval(syncTimer.current);
+  },[cfg.apiUrl,applyRemoteData]);
+
+  // Force sync
+  const forceSync=useCallback(()=>{
+    if(!API.url)return sT('Configure a URL da API primeiro');
+    setSyncSt('syncing');
+    API.sync({leads,vendedores:vends,config:{whatsappMsg:cfg.whatsappMsg,metaSemanal:metas.semanal,metaMensal:metas.mensal,valorPadrao:cfg.valorPadrao}}).then(r=>{
+      if(r?.success){setSyncSt('synced');dirty.current=false;sT('Sincronizado!')}else{setSyncSt('error');sT('Erro ao sincronizar')}
+    });
+  },[leads,vends,metas,cfg]);
+
+  const importSourceLeads=useCallback(()=>{
+    if(!API.url)return sT('Configure a URL da API primeiro');
+    setSyncSt('syncing');
+    API.importSource().then(r=>{
+      if(!r?.success){setSyncSt('error');sT('Erro ao importar leads');return}
+      API.fetch().then(data=>{
+        if(data){applyRemoteData(data);setSyncSt('synced');sT((r.imported||0)+' leads importados da planilha!')}else{setSyncSt('error');sT('Importou, mas não consegui recarregar os dados')}})
+    })
+  },[applyRemoteData]);
+  const wpUrl=(num,msg)=>{const n=num.replace(/\D/g,'');if(!n)return'';const full=n.startsWith('55')?n:'55'+n;const m=encodeURIComponent(msg||cfg.whatsappMsg||'');return'https://wa.me/'+full+(m?'?text='+m:'')};
+
+  const uL=(id,up)=>{setLeads(p=>p.map(l=>{if(l.id!==id)return l;const u={...l,...up,updatedAt:new Date().toISOString()};if(up.status&&up.status!==l.status){aA('<strong>'+l.nome+'</strong> → <strong>'+sI(up.status).l+'</strong>');if(up.status==='matriculado')u.dataMatricula=new Date().toISOString();if(up.status==='contatado'&&!l.dataContato)u.dataContato=new Date().toISOString()}return u}))};
+  const dL=id=>{const l=leads.find(x=>x.id===id);if(l)aA('Lead <strong>'+l.nome+'</strong> removido');setLeads(p=>p.filter(x=>x.id!==id))};
+  const iL=data=>{const vp=cfg.valorPadrao||50;const nl=data.map(r=>{const n=(r.Nome||r.nome||r.NOME||r.name||'').trim();const e=(r.Email||r.email||r.EMAIL||r['E-mail']||'').trim();const w=(r.WhatsApp||r.whatsapp||r.WHATSAPP||r.Telefone||r.telefone||r.Celular||r.celular||r.phone||'').toString().trim();if(!n&&!e&&!w)return null;return{id:gid(),nome:n,email:e,whatsapp:w,status:'novo',vendedor:'',valor:vp,notas:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),dataContato:null,dataMatricula:null}}).filter(Boolean);setLeads(p=>[...p,...nl]);aA('<strong>'+nl.length+' leads</strong> importados');sT(nl.length+' leads importados!')};
+
+  const mt=useMemo(()=>{
+    const t=leads.length;const bS={};ST.forEach(s=>bS[s.id]=leads.filter(l=>l.status===s.id).length);
+    const c=t-bS.novo;const ma=bS.matriculado;const pe=bS.perdido;
+    const tC=t?((c/t)*100).toFixed(1):0;const tM=t?((ma/t)*100).toFixed(1):0;
+    const now=new Date();const ws=new Date(now);ws.setDate(now.getDate()-now.getDay());ws.setHours(0,0,0,0);const ms=new Date(now.getFullYear(),now.getMonth(),1);
+    const maS=leads.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ws).length;
+    const maM=leads.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ms).length;
+    const wk=wK(),mk=mK();const mSe=metas.semanal[wk]||0;const mMe=metas.mensal[mk]||0;
+    const pS=mSe?Math.min((maS/mSe)*100,100):0;const pM=mMe?Math.min((maM/mMe)*100,100):0;
+    // Revenue
+    const revTotal=leads.filter(l=>l.status==='matriculado').reduce((s,l)=>s+(Number(l.valor)||50),0);
+    const revMes=leads.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ms).reduce((s,l)=>s+(Number(l.valor)||50),0);
+    const revSem=leads.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ws).reduce((s,l)=>s+(Number(l.valor)||50),0);
+    // Per status revenue
+    const revByS={};ST.forEach(s=>{revByS[s.id]=leads.filter(l=>l.status===s.id).reduce((sum,l)=>sum+(Number(l.valor)||50),0)});
+    const pV=vends.map(v=>{const vL=leads.filter(l=>l.vendedor===v.id);const vM=vL.filter(l=>l.status==='matriculado').length;const vMM=vL.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ms).length;const vRev=vL.filter(l=>l.status==='matriculado').reduce((s,l)=>s+(Number(l.valor)||50),0);return{...v,total:vL.length,matriculados:vM,matriculadosMes:vMM,taxa:vL.length?((vM/vL.length)*100).toFixed(1):0,rev:vRev}});
+    return{t,bS,c,ma,pe,tC,tM,maS,maM,mSe,mMe,pS,pM,pV,revTotal,revMes,revSem,revByS}
+  },[leads,vends,metas]);
+
+  const pages=[{id:'dashboard',l:'Dashboard',i:'d'},{id:'leads',l:'Leads',i:'l'},{id:'pipeline',l:'Pipeline',i:'p'},{id:'metas',l:'Metas',i:'t'},{id:'equipe',l:'Equipe',i:'e'},{id:'config',l:'Configurações',i:'c'}];
+  const icons={d:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>,l:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>,p:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="6" height="18" rx="1"/><rect x="9" y="8" width="6" height="13" rx="1"/><rect x="17" y="5" width="6" height="16" rx="1"/></svg>,t:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,e:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>,c:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>};
+
+  return(<div className="app">
+    <div className="sidebar">
+      <div className="logo"><img src={LOGO_URL} alt="K" onError={e=>{e.target.style.display='none'}}/><div className="logo-text"><div className="brand">KERIGMA</div><div className="brand-sub">CRM de Vendas</div></div></div>
+      <nav><div className="nav-section">Menu</div>{pages.map(p=><div key={p.id} className={'nav-item '+(pg===p.id?'active':'')} onClick={()=>setPg(p.id)}>{icons[p.i]}<span>{p.l}</span></div>)}</nav>
+      <div className="sync-status" style={{color:syncSt==='synced'?'#22c55e':syncSt==='error'?'#ef4444':syncSt==='syncing'?'#f59e0b':'rgba(255,255,255,.35)'}}><span className="sync-dot" style={{background:'currentColor'}}></span><span>{syncSt==='synced'?'Sincronizado':syncSt==='syncing'?'Sincronizando...':syncSt==='error'?'Erro de sync':'Dados locais'}</span></div>
+      <div className="sidebar-footer">Universidade Kerigma © 2026</div>
+    </div>
+    <div className="main">
+      {pg==='dashboard'&&<Dash m={mt} acts={acts}/>}
+      {pg==='leads'&&<Leads leads={leads} vends={vends} iL={iL} uL={uL} dL={dL} setModal={setModal} sT={sT} aA={aA} setLeads={setLeads} cfg={cfg} wpUrl={wpUrl}/>}
+      {pg==='pipeline'&&<Pipe leads={leads} vends={vends} uL={uL} setModal={setModal} cfg={cfg} wpUrl={wpUrl} mt={mt}/>}
+      {pg==='metas'&&<MetasP metas={metas} setMetas={setMetas} m={mt} sT={sT}/>}
+      {pg==='equipe'&&<Equipe vends={vends} setVends={setVends} m={mt} sT={sT} leads={leads}/>}
+      {pg==='config'&&<Config cfg={cfg} setCfg={setCfg} sT={sT} forceSync={forceSync} importSourceLeads={importSourceLeads} syncSt={syncSt}/>}
+    </div>
+    {modal&&<div className="modal-overlay" onClick={()=>setModal(null)}><div className="modal" onClick={e=>e.stopPropagation()}>{modal}</div></div>}
+    {toast&&<div className="toast">{toast}</div>}
+  </div>);
+}
+
+// ========= DASHBOARD =========
+function Dash({m,acts}){
+  const cards=[{l:'Total de Leads',v:m.t,s:'na base'},{l:'Contatados',v:m.c,s:m.tC+'% contato'},{l:'Matrículas',v:m.ma,s:m.tM+'% conversão'},{l:'Perdidos',v:m.pe,s:''},{l:'Receita Total',v:fR(m.revTotal),s:m.ma+' matrículas',rev:true},{l:'Receita do Mês',v:fR(m.revMes),s:fR(m.revSem)+' na semana',rev:true}];
+  const bc=p=>p>=80?'green':p>=40?'gold':'red';
+  return(<div>
+    <div className="page-header"><div><div className="page-title">Dashboard</div><div className="page-subtitle">Visão geral — {mN()}</div></div></div>
+    <div className="cards-grid">{cards.map((c,i)=><div className={'card'+(c.rev?' revenue-highlight':'')} key={i}><div className="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/></svg></div><div className="card-label">{c.l}</div><div className="card-value">{c.v}</div><div className="card-sub">{c.s}</div></div>)}</div>
+    <div className="goal-section">
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}><h3 style={{fontSize:'.95rem',color:'var(--nv)'}}>Progresso das Metas</h3><span style={{fontSize:'.7rem',color:'var(--tx3)'}}>{wR()}</span></div>
+      <div className="goal-row"><div className="goal-label">Meta Semanal</div><div className="goal-bar-wrap"><div className={'goal-bar '+bc(m.pS)} style={{width:Math.max(m.pS,2)+'%'}}>{m.pS>=15?Math.round(m.pS)+'%':''}</div></div><div className="goal-numbers">{m.maS} / {m.mSe||'—'}</div></div>
+      <div className="goal-row"><div className="goal-label">Meta Mensal</div><div className="goal-bar-wrap"><div className={'goal-bar '+bc(m.pM)} style={{width:Math.max(m.pM,2)+'%'}}>{m.pM>=15?Math.round(m.pM)+'%':''}</div></div><div className="goal-numbers">{m.maM} / {m.mMe||'—'}</div></div>
+      {(!m.mSe&&!m.mMe)&&<div style={{textAlign:'center',padding:'6px 0',color:'var(--tx3)',fontSize:'.78rem'}}>Defina suas metas em <strong style={{color:'var(--gd)'}}>Metas</strong>.</div>}
+    </div>
+    <div className="grid-3">
+      <div className="funnel-wrap"><h3 style={{fontSize:'.95rem',color:'var(--nv)',marginBottom:14}}>Funil de Vendas</h3>
+        {ST.map(s=>{const c=m.bS[s.id]||0;const p=m.t?((c/m.t)*100):0;return <div className="funnel-stage" key={s.id}><div className="funnel-label">{s.l}</div><div className="funnel-bar-bg"><div className="funnel-bar" style={{width:Math.max(p,3)+'%',background:s.c}}>{p>=12?Math.round(p)+'%':''}</div></div><div className="funnel-count">{c}</div></div>})}
+      </div>
+      <div className="card" style={{padding:22}}><h3 style={{fontSize:'.95rem',color:'var(--nv)',marginBottom:14}}>Atividade Recente</h3>
+        <div className="activity-list">{acts.length===0&&<div style={{color:'var(--tx3)',fontSize:'.8rem',textAlign:'center',padding:16}}>Nenhuma atividade</div>}{acts.slice(0,20).map(a=><div className="activity-item" key={a.id}><div className="activity-dot"></div><div><div className="activity-text" dangerouslySetInnerHTML={{__html:a.text}}/><div className="activity-time">{fDT(a.date)}</div></div></div>)}</div>
+      </div>
+    </div>
+  </div>);
+}
+
+// ========= LEADS =========
+function Leads({leads,vends,iL,uL,dL,setModal,sT,aA,setLeads,cfg,wpUrl}){
+  const[sr,setSr]=useState('');const[fS,setFS]=useState('');const[fV,setFV]=useState('');const fRef=useRef();
+  const fl=useMemo(()=>leads.filter(l=>{if(fS&&l.status!==fS)return false;if(fV&&l.vendedor!==fV)return false;if(sr){const s=sr.toLowerCase();return l.nome.toLowerCase().includes(s)||l.email.toLowerCase().includes(s)||l.whatsapp.includes(s)}return true}),[leads,sr,fS,fV]);
+  const hF=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>iL(r.data)})};
+  const oA=()=>{let n='',e='',w='',v='',vl=cfg.valorPadrao||50;setModal(<div><h3>Adicionar Lead</h3><div className="form-group"><label>Nome</label><input onChange={ev=>n=ev.target.value} placeholder="Nome completo"/></div><div className="form-group"><label>Email</label><input type="email" onChange={ev=>e=ev.target.value}/></div><div className="form-group"><label>WhatsApp</label><input onChange={ev=>w=ev.target.value} placeholder="(11) 99999-9999"/></div><div className="form-group"><label>Vendedor</label><select onChange={ev=>v=ev.target.value}><option value="">Sem atribuição</option>{vends.map(vd=><option key={vd.id} value={vd.id}>{vd.nome}</option>)}</select></div><div className="form-group"><label>Valor da Matrícula</label><select defaultValue={vl} onChange={ev=>vl=Number(ev.target.value)}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div><div className="modal-actions"><button className="btn btn-outline" onClick={()=>setModal(null)}>Cancelar</button><button className="btn btn-gold" onClick={()=>{if(!n.trim())return sT('Nome obrigatório');setLeads(p=>[{id:gid(),nome:n.trim(),email:e.trim(),whatsapp:w.trim(),status:'novo',vendedor:v,valor:vl,notas:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),dataContato:null,dataMatricula:null},...p]);aA('Lead <strong>'+n+'</strong> adicionado');sT('Lead adicionado!');setModal(null)}}>Adicionar</button></div></div>)};
+  const oD=lead=>{setModal(<Det lead={lead} vends={vends} uL={uL} dL={dL} setModal={setModal} sT={sT} wpUrl={wpUrl}/>)};
+  const eC=()=>{const csv=Papa.unparse(leads.map(l=>({Nome:l.nome,Email:l.email,WhatsApp:l.whatsapp,Status:l.status,Vendedor:vends.find(v=>v.id===l.vendedor)?.nome||'',Valor:l.valor,Criado:fD(l.createdAt)})));const b=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='leads_kerigma.csv';a.click();sT('Exportado!')};
+  const dist=()=>{if(!vends.length)return sT('Adicione vendedores');const s=leads.filter(l=>!l.vendedor);if(!s.length)return sT('Todos já têm vendedor');let i=0;setLeads(p=>p.map(l=>{if(l.vendedor)return l;const v=vends[i%vends.length];i++;return{...l,vendedor:v.id,updatedAt:new Date().toISOString()}}));aA('<strong>'+s.length+' leads</strong> distribuídos');sT(s.length+' leads distribuídos!')};
+  return(<div>
+    <div className="page-header"><div><div className="page-title">Leads</div><div className="page-subtitle">{leads.length} leads · {fl.length} exibidos</div></div>
+    <div style={{display:'flex',gap:6,flexWrap:'wrap'}}><button className="btn btn-outline" onClick={eC}>Exportar</button><button className="btn btn-outline" onClick={dist}>Distribuir</button><button className="btn btn-outline" onClick={oA}>+ Novo</button><button className="btn btn-gold" onClick={()=>fRef.current.click()}>Importar CSV</button><input ref={fRef} type="file" accept=".csv,.txt" hidden onChange={hF}/></div></div>
+    {leads.length===0?(<div className="import-area" onClick={()=>fRef.current.click()} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f)Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>iL(r.data)})}}><div style={{fontSize:'1.8rem',marginBottom:10,color:'var(--gd)'}}>📄</div><div style={{fontSize:'.95rem',fontWeight:600,color:'var(--nv)'}}>Importe sua planilha</div><div style={{color:'var(--tx2)',fontSize:'.82rem'}}>Arraste um CSV ou clique para selecionar</div></div>
+    ):(<div className="table-wrap"><div className="table-header"><div className="table-filters"><div style={{position:'relative'}}><input placeholder="Buscar..." value={sr} onChange={e=>setSr(e.target.value)} style={{paddingLeft:30,width:200}}/></div><select value={fS} onChange={e=>setFS(e.target.value)}><option value="">Todos status</option>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select><select value={fV} onChange={e=>setFV(e.target.value)}><option value="">Todos vendedores</option>{vends.map(v=><option key={v.id} value={v.id}>{v.nome}</option>)}</select></div></div>
+    <div style={{overflowX:'auto'}}><table><thead><tr><th>Nome</th><th>WhatsApp</th><th>Status</th><th>Valor</th><th>Vendedor</th><th>Criado</th><th>Ações</th></tr></thead><tbody>
+      {fl.slice(0,100).map(l=>{const st=sI(l.status);const wl=wpUrl(l.whatsapp);return <tr key={l.id}><td><span className="lead-name" onClick={()=>oD(l)}>{l.nome||'—'}</span></td>
+      <td>{wl?<a className="lead-whatsapp" href={wl} target="_blank" rel="noopener">{l.whatsapp}</a>:(l.whatsapp||'—')}</td>
+      <td><select value={l.status} onChange={e=>uL(l.id,{status:e.target.value})} style={{background:st.b,color:st.c,border:'none',fontSize:'.72rem',fontWeight:600,padding:'3px 7px',borderRadius:5,cursor:'pointer'}}>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select></td>
+      <td><select value={l.valor||50} onChange={e=>uL(l.id,{valor:Number(e.target.value)})} style={{background:'transparent',border:'1px solid var(--bd)',fontSize:'.76rem',padding:'2px 6px',borderRadius:4,cursor:'pointer',color:'var(--gd)',fontWeight:600}}><option value={50}>R$50</option><option value={70}>R$70</option></select></td>
+      <td><select value={l.vendedor||''} onChange={e=>uL(l.id,{vendedor:e.target.value})} style={{background:'transparent',border:'none',color:'var(--tx2)',fontSize:'.78rem',cursor:'pointer'}}><option value="">—</option>{vends.map(v=><option key={v.id} value={v.id}>{v.nome}</option>)}</select></td>
+      <td style={{fontSize:'.76rem',color:'var(--tx3)'}}>{fD(l.createdAt)}</td>
+      <td><div style={{display:'flex',gap:3}}><button className="btn btn-sm btn-outline" onClick={()=>oD(l)}>Ver</button><button className="btn btn-sm btn-red" onClick={()=>{if(confirm('Remover?'))dL(l.id)}}>×</button></div></td></tr>})}
+    </tbody></table></div></div>)}
+  </div>);
+}
+
+// ========= LEAD DETAIL =========
+function Det({lead,vends,uL,dL,setModal,sT,wpUrl}){
+  const[nt,setNt]=useState('');const st=sI(lead.status);const wl=wpUrl(lead.whatsapp);
+  const aN=()=>{if(!nt.trim())return;uL(lead.id,{notas:[{text:nt.trim(),date:new Date().toISOString()},...(lead.notas||[])]});setNt('');sT('Nota salva')};
+  return(<div>
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}><div><h3 style={{marginBottom:4}}>{lead.nome||'Lead'}</h3><span className={'badge '+lead.status}>{st.l}</span><span style={{marginLeft:8,fontSize:'.82rem',fontWeight:600,color:'var(--gd)'}}>R$ {lead.valor||50},00</span></div><button className="btn btn-sm btn-outline" onClick={()=>setModal(null)}>✕</button></div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,margin:'16px 0'}}>
+      <div><label style={{fontSize:'.68rem',color:'var(--tx3)',textTransform:'uppercase',letterSpacing:1}}>Email</label><div style={{fontSize:'.85rem',marginTop:1}}>{lead.email||'—'}</div></div>
+      <div><label style={{fontSize:'.68rem',color:'var(--tx3)',textTransform:'uppercase',letterSpacing:1}}>WhatsApp</label><div style={{marginTop:1}}>{wl?<a href={wl} target="_blank" rel="noopener" style={{color:'var(--gn)',textDecoration:'none',fontSize:'.85rem'}}>{lead.whatsapp} ↗</a>:<span style={{fontSize:'.85rem'}}>{lead.whatsapp||'—'}</span>}</div></div>
+    </div>
+    <div className="form-group"><label>Status</label><select value={lead.status} onChange={e=>uL(lead.id,{status:e.target.value})}>{ST.map(s=><option key={s.id} value={s.id}>{s.l}</option>)}</select></div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+      <div className="form-group"><label>Vendedor</label><select value={lead.vendedor||''} onChange={e=>uL(lead.id,{vendedor:e.target.value})}><option value="">—</option>{vends.map(v=><option key={v.id} value={v.id}>{v.nome}</option>)}</select></div>
+      <div className="form-group"><label>Valor Matrícula</label><select value={lead.valor||50} onChange={e=>uL(lead.id,{valor:Number(e.target.value)})}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div>
+    </div>
+    <div style={{borderTop:'1px solid var(--bd)',paddingTop:14,marginTop:6}}><label style={{fontSize:'.72rem',fontWeight:600,color:'var(--tx2)',textTransform:'uppercase',letterSpacing:1,display:'block',marginBottom:5}}>Notas</label><div style={{display:'flex',gap:6}}><textarea value={nt} onChange={e=>setNt(e.target.value)} placeholder="Observação..." style={{flex:1,minHeight:36}}/><button className="btn btn-gold" onClick={aN} style={{alignSelf:'flex-end'}}>Salvar</button></div><div style={{marginTop:10,maxHeight:160,overflowY:'auto'}}>{(lead.notas||[]).map((n,i)=><div key={i} style={{padding:'6px 0',borderBottom:'1px solid var(--bd)',fontSize:'.8rem'}}><div>{n.text}</div><div style={{color:'var(--tx3)',fontSize:'.68rem',marginTop:2}}>{fDT(n.date)}</div></div>)}</div></div>
+    <div className="modal-actions">{wl&&<a href={wl} target="_blank" rel="noopener" className="btn btn-green" style={{textDecoration:'none'}}>WhatsApp</a>}<button className="btn btn-red" onClick={()=>{if(confirm('Remover?')){dL(lead.id);setModal(null)}}}>Remover</button></div>
+  </div>);
+}
+
+// ========= PIPELINE (DRAG & DROP) =========
+function Pipe({leads,vends,uL,setModal,cfg,wpUrl,mt}){
+  const[dragId,setDragId]=useState(null);
+  const handleDragStart=(e,leadId)=>{setDragId(leadId);e.dataTransfer.effectAllowed='move'};
+  const handleDragOver=(e)=>{e.preventDefault();e.dataTransfer.dropEffect='move'};
+  const handleDragEnter=(e)=>{e.currentTarget.classList.add('drag-over')};
+  const handleDragLeave=(e)=>{e.currentTarget.classList.remove('drag-over')};
+  const handleDrop=(e,newStatus)=>{e.preventDefault();e.currentTarget.classList.remove('drag-over');if(dragId){uL(dragId,{status:newStatus});setDragId(null)}};
+  return(<div>
+    <div className="page-header"><div><div className="page-title">Pipeline</div><div className="page-subtitle">Arraste os cards para atualizar o status</div></div>
+    <div style={{fontSize:'.82rem',color:'var(--gd)',fontWeight:600}}>Receita total: {fR(mt.revTotal)}</div></div>
+    <div className="pipeline">{ST.map(s=>{const cl=leads.filter(l=>l.status===s.id);const rev=cl.reduce((sum,l)=>sum+(Number(l.valor)||50),0);return <div className="pipeline-col" key={s.id} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={e=>handleDrop(e,s.id)}>
+      <div className="pipeline-col-header"><div><div className="pipeline-col-title" style={{color:s.c}}>{s.l}</div>{s.id==='matriculado'&&<div className="pipeline-col-revenue">{fR(rev)}</div>}</div><div className="pipeline-col-count" style={{background:s.b,color:s.c}}>{cl.length}</div></div>
+      <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl}/>)}>
+        <div className="pipeline-card-name">{l.nome||'—'}</div>
+        <div className="pipeline-card-info">{vd?.nome||'Sem vendedor'} · {fD(l.createdAt)}</div>
+        <div className="pipeline-card-valor">R$ {l.valor||50},00</div>
+        {wl&&<a href={wl} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()} style={{fontSize:'.68rem',color:'var(--gn)',textDecoration:'none',marginTop:4,display:'inline-block'}}>WhatsApp ↗</a>}
+      </div>})}</div>
+    </div>})}</div>
+  </div>);
+}
+
+// ========= METAS =========
+function MetasP({metas,setMetas,m,sT}){
+  const wk=wK(),mk=mK();const[ms,setMs]=useState(metas.semanal[wk]||'');const[mm,setMm]=useState(metas.mensal[mk]||'');
+  const salvar=()=>{setMetas({semanal:{...metas.semanal,[wk]:parseInt(ms)||0},mensal:{...metas.mensal,[mk]:parseInt(mm)||0}});sT('Metas atualizadas!')};
+  const bc=p=>p>=100?'green':p>=60?'gold':'red';
+  return(<div><div className="page-header"><div><div className="page-title">Metas</div><div className="page-subtitle">Defina e acompanhe matrículas</div></div></div>
+    <div className="grid-2">
+      <div className="card" style={{padding:24}}><h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Configurar Metas</h3>
+        <div className="form-group"><label>Meta Semanal ({wR()})</label><input type="number" value={ms} onChange={e=>setMs(e.target.value)} placeholder="Ex: 18" min="0"/></div>
+        <div className="form-group"><label>Meta Mensal ({mN()})</label><input type="number" value={mm} onChange={e=>setMm(e.target.value)} placeholder="Ex: 73" min="0"/></div>
+        <button className="btn btn-gold" onClick={salvar} style={{marginTop:6}}>Salvar Metas</button>
+      </div>
+      <div className="card" style={{padding:24}}><h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Status Atual</h3>
+        <div style={{marginBottom:20}}><div style={{display:'flex',justifyContent:'space-between',marginBottom:6}}><span style={{fontSize:'.8rem',fontWeight:600,color:'var(--nv)'}}>Semanal</span><span style={{fontSize:'.8rem',fontWeight:700}}>{m.maS} / {m.mSe||'—'}</span></div><div className="goal-bar-wrap" style={{height:18}}><div className={'goal-bar '+bc(m.pS)} style={{width:Math.max(m.pS,2)+'%'}}></div></div><div style={{fontSize:'.7rem',color:'var(--tx3)',marginTop:3}}>{m.pS>=100?'Meta atingida! 🎯':'Faltam '+Math.max((m.mSe||0)-m.maS,0)}</div></div>
+        <div><div style={{display:'flex',justifyContent:'space-between',marginBottom:6}}><span style={{fontSize:'.8rem',fontWeight:600,color:'var(--nv)'}}>Mensal</span><span style={{fontSize:'.8rem',fontWeight:700}}>{m.maM} / {m.mMe||'—'}</span></div><div className="goal-bar-wrap" style={{height:18}}><div className={'goal-bar '+bc(m.pM)} style={{width:Math.max(m.pM,2)+'%'}}></div></div><div style={{fontSize:'.7rem',color:'var(--tx3)',marginTop:3}}>{m.pM>=100?'Meta atingida! 🎯':'Faltam '+Math.max((m.mMe||0)-m.maM,0)}</div></div>
+        <div style={{marginTop:20,padding:12,background:'var(--sf)',borderRadius:8,border:'1px solid var(--bd)'}}><div style={{fontSize:'.76rem',fontWeight:600,color:'var(--nv)',marginBottom:6}}>Receita por Vendedor</div>{m.pV.map(v=><div key={v.id} style={{display:'flex',justifyContent:'space-between',fontSize:'.8rem',padding:'3px 0'}}><span style={{color:'var(--tx2)'}}>{v.nome}</span><span style={{fontWeight:700,color:'var(--gd)'}}>{fR(v.rev)}</span></div>)}</div>
+      </div>
+    </div>
+  </div>);
+}
+
+// ========= EQUIPE =========
+function Equipe({vends,setVends,m,sT,leads}){
+  const[nm,setNm]=useState('');
+  const add=()=>{if(!nm.trim())return sT('Digite o nome');setVends(p=>[...p,{id:gid(),nome:nm.trim()}]);setNm('');sT('Vendedor adicionado!')};
+  const del=id=>{if(!confirm('Remover?'))return;setVends(p=>p.filter(v=>v.id!==id));sT('Removido')};
+  return(<div><div className="page-header"><div><div className="page-title">Equipe</div><div className="page-subtitle">{vends.length} vendedores</div></div></div>
+    <div className="card" style={{padding:18,marginBottom:16}}><div style={{display:'flex',gap:8,alignItems:'flex-end'}}><div className="form-group" style={{flex:1,marginBottom:0}}><label>Adicionar Vendedor</label><input value={nm} onChange={e=>setNm(e.target.value)} placeholder="Nome" onKeyDown={e=>e.key==='Enter'&&add()}/></div><button className="btn btn-gold" onClick={add}>+ Adicionar</button></div></div>
+    <div className="team-grid">{m.pV.map(v=>{const ea=leads.filter(l=>l.vendedor===v.id&&['contatado','interessado','negociando'].includes(l.status)).length;return <div className="team-card" key={v.id}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}><div className="team-name">{v.nome}</div><button className="btn btn-sm btn-red" onClick={()=>del(v.id)}>×</button></div><div className="team-stats"><div className="team-stat"><div className="team-stat-val">{v.total}</div><div className="team-stat-label">Leads</div></div><div className="team-stat"><div className="team-stat-val" style={{color:'var(--gn)'}}>{v.matriculados}</div><div className="team-stat-label">Matrículas</div></div><div className="team-stat"><div className="team-stat-val" style={{color:'var(--gd)'}}>{fR(v.rev)}</div><div className="team-stat-label">Receita</div></div><div className="team-stat"><div className="team-stat-val" style={{color:'var(--or)'}}>{v.taxa}%</div><div className="team-stat-label">Conversão</div></div></div></div>})}</div>
+  </div>);
+}
+
+// ========= CONFIGURAÇÕES =========
+function Config({cfg,setCfg,sT,forceSync,importSourceLeads,syncSt}){
+  const[msg,setMsg]=useState(cfg.whatsappMsg||'');
+  const[url,setUrl]=useState(cfg.apiUrl||'');
+  const[vp,setVp]=useState(cfg.valorPadrao||50);
+  const salvar=()=>{setCfg({...cfg,whatsappMsg:msg,apiUrl:url.trim(),valorPadrao:Number(vp)});sT('Configurações salvas!')};
+  return(<div><div className="page-header"><div><div className="page-title">Configurações</div><div className="page-subtitle">Mensagem do WhatsApp, sincronização e valores</div></div></div>
+    <div className="grid-2">
+      <div className="card" style={{padding:24}}>
+        <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Mensagem do WhatsApp</h3>
+        <div className="form-group"><label>Mensagem padrão ao clicar no botão WhatsApp</label><textarea value={msg} onChange={e=>setMsg(e.target.value)} style={{minHeight:100}} placeholder="Olá! Sou da Universidade Teológica Kerigma..."/></div>
+        <div style={{padding:12,background:'var(--sf)',borderRadius:8,fontSize:'.78rem',color:'var(--tx2)',marginBottom:14}}>
+          <strong>Pré-visualização:</strong><br/><span style={{color:'var(--gn)'}}>{msg||'(vazio)'}</span>
+        </div>
+        <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:14,marginTop:20}}>Valor Padrão</h3>
+        <div className="form-group"><label>Valor padrão para novos leads</label><select value={vp} onChange={e=>setVp(Number(e.target.value))}><option value={50}>R$ 50,00</option><option value={70}>R$ 70,00</option></select></div>
+        <button className="btn btn-gold" onClick={salvar} style={{marginTop:8}}>Salvar Configurações</button>
+      </div>
+      <div className="card" style={{padding:24}}>
+        <h3 style={{fontSize:'1rem',color:'var(--nv)',marginBottom:18}}>Sincronização (Google Sheets)</h3>
+        <div style={{padding:14,background:syncSt==='synced'?'var(--gnd)':syncSt==='error'?'var(--rdd)':'var(--sf)',borderRadius:10,marginBottom:16,fontSize:'.82rem'}}>
+          <strong>Status:</strong> {syncSt==='synced'?'✅ Conectado e sincronizado':syncSt==='syncing'?'⏳ Sincronizando...':syncSt==='error'?'❌ Erro na conexão':'📱 Dados salvos apenas neste navegador'}
+        </div>
+        <div className="form-group"><label>URL do Google Apps Script</label><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"/></div>
+        <div style={{display:'flex',gap:8,marginTop:8,flexWrap:'wrap'}}><button className="btn btn-gold" onClick={salvar}>Salvar URL</button><button className="btn btn-outline" onClick={forceSync}>Sincronizar Agora</button><button className="btn btn-outline" onClick={importSourceLeads}>Importar Leads da Planilha</button></div>
+        <div style={{marginTop:20,padding:16,background:'var(--gdd)',borderRadius:10,fontSize:'.78rem',color:'var(--nv)'}}>
+          <strong style={{color:'var(--gd)'}}>Como configurar:</strong><br/><br/>
+          1. Abra <strong>script.google.com</strong><br/>
+          2. Crie um novo projeto<br/>
+          3. Cole o código do arquivo <strong>crm-kerigma-backend.gs</strong><br/>
+          4. Clique em Implantar → Nova implantação<br/>
+          5. Tipo: App da Web / Quem acessa: Qualquer pessoa<br/>
+          6. Copie a URL e cole aqui<br/><br/>
+          <strong>Pronto!</strong> Os dados ficam salvos na planilha do Google e acessíveis por qualquer navegador/dispositivo.<br/><br/>Use <strong>Importar Leads da Planilha</strong> para puxar novamente os contatos da sua base externa.
+        </div>
+      </div>
+    </div>
+  </div>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
