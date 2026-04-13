@@ -272,10 +272,12 @@ function App(){
     const revTotal=leads.filter(l=>l.status==='matriculado').reduce((s,l)=>s+(Number(l.valor)||50),0);
     const revMes=leads.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ms).reduce((s,l)=>s+(Number(l.valor)||50),0);
     const revSem=leads.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ws).reduce((s,l)=>s+(Number(l.valor)||50),0);
+    const totalMatriculadosRecorrentes=leads.filter(l=>l.status==='matriculado').length;
+    const recorrenciaProximoMes=totalMatriculadosRecorrentes*100;
     // Per status revenue
     const revByS={};ST.forEach(s=>{revByS[s.id]=leads.filter(l=>l.status===s.id).reduce((sum,l)=>sum+(Number(l.valor)||50),0)});
     const pV=vends.map(v=>{const vL=leads.filter(l=>l.vendedor===v.id);const vM=vL.filter(l=>l.status==='matriculado').length;const vMM=vL.filter(l=>l.status==='matriculado'&&l.dataMatricula&&new Date(l.dataMatricula)>=ms).length;const vRev=vL.filter(l=>l.status==='matriculado').reduce((s,l)=>s+(Number(l.valor)||50),0);return{...v,total:vL.length,matriculados:vM,matriculadosMes:vMM,taxa:vL.length?((vM/vL.length)*100).toFixed(1):0,rev:vRev}});
-    return{t,bS,c,ma,pe,tC,tM,maS,maM,mSe,mMe,pS,pM,pV,revTotal,revMes,revSem,revByS}
+    return{t,bS,c,ma,pe,tC,tM,maS,maM,mSe,mMe,pS,pM,pV,revTotal,revMes,revSem,revByS,totalMatriculadosRecorrentes,recorrenciaProximoMes}
   },[leads,vends,metas]);
 
   const pages=[{id:'dashboard',l:'Dashboard',i:'d'},{id:'leads',l:'Leads',i:'l'},{id:'pipeline',l:'Pipeline',i:'p'},{id:'metas',l:'Metas',i:'t'},{id:'equipe',l:'Equipe',i:'e'},{id:'config',l:'Configurações',i:'c'}];
@@ -303,7 +305,7 @@ function App(){
 
 // ========= DASHBOARD =========
 function Dash({m,acts}){
-  const cards=[{l:'Total de Leads',v:m.t,s:'na base'},{l:'Contatados',v:m.c,s:m.tC+'% contato'},{l:'Matrículas',v:m.ma,s:m.tM+'% conversão'},{l:'Perdidos',v:m.pe,s:''},{l:'Receita Total',v:fR(m.revTotal),s:m.ma+' matrículas',rev:true},{l:'Receita do Mês',v:fR(m.revMes),s:fR(m.revSem)+' na semana',rev:true}];
+  const cards=[{l:'Total de Leads',v:m.t,s:'na base'},{l:'Contatados',v:m.c,s:m.tC+'% contato'},{l:'Matrículas',v:m.ma,s:m.tM+'% conversão'},{l:'Perdidos',v:m.pe,s:''},{l:'Comissão de Matrículas',v:fR(m.revTotal),s:m.ma+' matrículas',rev:true},{l:'Comissão do Mês',v:fR(m.revMes),s:fR(m.revSem)+' na semana',rev:true},{l:'Receita Recorrente Próx. Mês',v:fR(m.recorrenciaProximoMes),s:m.totalMatriculadosRecorrentes+' alunos ativos',rev:true}];
   const bc=p=>p>=80?'green':p>=40?'gold':'red';
   return(<div>
     <div className="page-header"><div><div className="page-title">Dashboard</div><div className="page-subtitle">Visão geral — {mN()}</div></div></div>
@@ -383,7 +385,7 @@ function Pipe({leads,vends,uL,setModal,cfg,wpUrl,mt}){
     <div className="page-header"><div><div className="page-title">Pipeline</div><div className="page-subtitle">Arraste os cards para atualizar o status</div></div>
     <div style={{fontSize:'.82rem',color:'var(--gd)',fontWeight:600}}>Receita total: {fR(mt.revTotal)}</div></div>
     <div className="pipeline">{ST.map(s=>{const cl=leads.filter(l=>l.status===s.id);const rev=cl.reduce((sum,l)=>sum+(Number(l.valor)||50),0);return <div className="pipeline-col" key={s.id} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={e=>handleDrop(e,s.id)}>
-      <div className="pipeline-col-header"><div><div className="pipeline-col-title" style={{color:s.c}}>{s.l}</div>{s.id==='matriculado'&&<div className="pipeline-col-revenue">{fR(rev)}</div>}</div><div className="pipeline-col-count" style={{background:s.b,color:s.c}}>{cl.length}</div></div>
+      <div className="pipeline-col-header"><div><div className="pipeline-col-title" style={{color:s.c}}>{s.l}</div><div className="pipeline-col-revenue" style={{fontSize:'.82rem',fontWeight:700,marginTop:4,color:'var(--gd)'}}>Acumulado: {fR(rev)}</div></div><div className="pipeline-col-count" style={{background:s.b,color:s.c}}>{cl.length}</div></div>
       <div className="pipeline-cards">{cl.slice(0,30).map(l=>{const vd=vends.find(v=>v.id===l.vendedor);const wl=wpUrl(l.whatsapp);return <div className={'pipeline-card'+(dragId===l.id?' dragging':'')} key={l.id} draggable onDragStart={e=>handleDragStart(e,l.id)} onDragEnd={()=>setDragId(null)} onClick={()=>setModal(<Det lead={l} vends={vends} uL={uL} dL={()=>{}} setModal={setModal} sT={()=>{}} wpUrl={wpUrl}/>)}>
         <div className="pipeline-card-name">{String(l.nome||'')||'—'}</div>
         <div className="pipeline-card-info">{vd?.nome||'Sem vendedor'} · {fD(l.createdAt)}</div>
