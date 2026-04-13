@@ -174,14 +174,16 @@ function App(){
   const[vends,setVends]=useState(()=>ld('vends',[{id:'gabriel',nome:'Gabriel Ribeiro'}]));
   const[metas,setMetas]=useState(()=>ld('metas',{semanal:{},mensal:{}}));
   const[acts,setActs]=useState(()=>ld('acts',[]));
-  const[cfg,setCfg]=useState(()=>{const saved=ld('cfg',{});return{whatsappMsg:saved.whatsappMsg||DEFAULT_WHATSAPP_MSG,apiUrl:saved.apiUrl||DEFAULT_API_URL,valorPadrao:Number(saved.valorPadrao)||50}});
+  const[cfg,setCfg]=useState(()=>{const saved=ld('cfg',{});return{whatsappMsg:saved.whatsappMsg||DEFAULT_WHATSAPP_MSG,apiUrl:DEFAULT_API_URL,valorPadrao:Number(saved.valorPadrao)||50}});
   const[toast,setToast]=useState(null);
   const[modal,setModal]=useState(null);
   const[syncSt,setSyncSt]=useState('syncing');// syncing|synced|error
   const syncTimer=useRef(null);
+  const pollTimer=useRef(null);
   const saveTimer=useRef(null);
   const dirty=useRef(false);
   const hydrating=useRef(false);
+  const hasLoadedRemote=useRef(false);
   const latest=useRef({leads:[],vends:[],metas:{semanal:{},mensal:{}},cfg:{}});
 
   const sT=m=>{setToast(m);setTimeout(()=>setToast(null),3000)};
@@ -192,7 +194,7 @@ function App(){
   useEffect(()=>{sv('vends',vends);if(!hydrating.current)dirty.current=true},[vends]);
   useEffect(()=>{sv('metas',metas);if(!hydrating.current)dirty.current=true},[metas]);
   useEffect(()=>{sv('acts',acts)},[acts]);
-  useEffect(()=>{sv('cfg',cfg);API.url=cfg.apiUrl||DEFAULT_API_URL},[cfg]);
+  useEffect(()=>{const normalized={...cfg,apiUrl:DEFAULT_API_URL};sv('cfg',normalized);API.url=DEFAULT_API_URL},[cfg]);
   useEffect(()=>{latest.current={leads,vends,metas,cfg}},[leads,vends,metas,cfg]);
 
   const applyRemoteData=useCallback((data)=>{
@@ -219,43 +221,77 @@ function App(){
   },[cfg.valorPadrao]);
 
   // Sync with Google Sheets
-  useEffect(()=>{
-    API.url=cfg.apiUrl||DEFAULT_API_URL;
+  const pullRemote=useCallback(()=>{
+    API.url=DEFAULT_API_URL;
     setSyncSt('syncing');
-    API.fetch().then(data=>{
-      if(data){applyRemoteData(data);setSyncSt('synced')}else setSyncSt('error');
-    });
-    syncTimer.current=setInterval(()=>{
-      if(!dirty.current||!API.url)return;
-      const cur=latest.current;
-      setSyncSt('syncing');
-      API.sync({leads:cur.leads,vendedores:cur.vends,config:{whatsappMsg:cur.cfg.whatsappMsg,metaSemanal:cur.metas.semanal,metaMensal:cur.metas.mensal,valorPadrao:cur.cfg.valorPadrao}}).then(r=>{
-        if(r?.success){setSyncSt('synced');dirty.current=false}else setSyncSt('error');
-      });
-    },30000);
-    return()=>clearInterval(syncTimer.current);
-  },[cfg.apiUrl,applyRemoteData]);
+    return API.fetch().then(data=>{
+      if(data){
+        applyRemoteData(data);
+        hasLoadedRemote.current=true;
+        setSyncSt('synced');
+        return true;
+      }
+      setSyncSt('error');
+      return false;
+    }).catch(()=>{setSyncSt('error');return false});
+  },[applyRemoteData]);
+
+  const pushRemote=useCallback((showSyncState=true)=>{
+    if(hydrating.current||!hasLoadedRemote.current||!API.url||!dirty.current)return Promise.resolve(null);
+    const cur=latest.current;
+    if(showSyncState) setSyncSt('syncing');
+    return API.sync({leads:cur.leads,vendedores:cur.vends,config:{whatsappMsg:cur.cfg.whatsappMsg,metaSemanal:cur.metas.semanal,metaMensal:cur.metas.mensal,valorPadrao:cur.cfg.valorPadrao}}).then(r=>{
+      if(r?.success){setSyncSt('synced');dirty.current=false;return r;}
+      setSyncSt('error');
+      return r;
+    }).catch(()=>{setSyncSt('error');return null});
+  },[]);
 
   useEffect(()=>{
-    if(hydrating.current||!API.url||!dirty.current)return;
+    API.url=DEFAULT_API_URL;
+    pullRemote();
+
+    syncTimer.current=setInterval(()=>{
+      if(dirty.current){
+        pushRemote(false);
+      }
+    },5000);
+
+    pollTimer.current=setInterval(()=>{
+      if(!dirty.current){
+        pullRemote();
+      }
+    },10000);
+
+    const onFocus=()=>{ if(!dirty.current) pullRemote(); };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+
+    return()=>{
+      clearInterval(syncTimer.current);
+      clearInterval(pollTimer.current);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
+    };
+  },[pullRemote,pushRemote]);
+
+  useEffect(()=>{
+    if(hydrating.current||!API.url||!dirty.current||!hasLoadedRemote.current)return;
     clearTimeout(saveTimer.current);
     saveTimer.current=setTimeout(()=>{
-      const cur=latest.current;
-      setSyncSt('syncing');
-      API.sync({leads:cur.leads,vendedores:cur.vends,config:{whatsappMsg:cur.cfg.whatsappMsg,metaSemanal:cur.metas.semanal,metaMensal:cur.metas.mensal,valorPadrao:cur.cfg.valorPadrao}}).then(r=>{
-        if(r?.success){setSyncSt('synced');dirty.current=false}else setSyncSt('error');
-      });
-    },1500);
+      pushRemote(true);
+    },800);
     return()=>clearTimeout(saveTimer.current);
-  },[leads,vends,metas,cfg]);
+  },[leads,vends,metas,cfg,pushRemote]);
 
   // Force sync
   const forceSync=useCallback(()=>{
     setSyncSt('syncing');
-    API.sync({leads,vendedores:vends,config:{whatsappMsg:cfg.whatsappMsg,metaSemanal:metas.semanal,metaMensal:metas.mensal,valorPadrao:cfg.valorPadrao}}).then(r=>{
+    const cur=latest.current;
+    API.sync({leads:cur.leads,vendedores:cur.vends,config:{whatsappMsg:cur.cfg.whatsappMsg,metaSemanal:cur.metas.semanal,metaMensal:cur.metas.mensal,valorPadrao:cur.cfg.valorPadrao}}).then(r=>{
       if(r?.success){setSyncSt('synced');dirty.current=false;sT('Sincronizado!')}else{setSyncSt('error');sT('Erro ao sincronizar')}
     });
-  },[leads,vends,metas,cfg]);
+  },[]);
 
   const importSourceLeads=useCallback(()=>{
     setSyncSt('syncing');
@@ -446,9 +482,9 @@ function Equipe({vends,setVends,m,sT,leads}){
 // ========= CONFIGURAÇÕES =========
 function Config({cfg,setCfg,sT,forceSync,syncSt}){
   const[msg,setMsg]=useState(cfg.whatsappMsg||DEFAULT_WHATSAPP_MSG);
-  const[url,setUrl]=useState(cfg.apiUrl||DEFAULT_API_URL);
+  const[url,setUrl]=useState(DEFAULT_API_URL);
   const[vp,setVp]=useState(cfg.valorPadrao||50);
-  const salvar=()=>{setCfg({...cfg,whatsappMsg:msg||DEFAULT_WHATSAPP_MSG,apiUrl:url.trim()||DEFAULT_API_URL,valorPadrao:Number(vp)});sT('Configurações salvas!')};
+  const salvar=()=>{setCfg({...cfg,whatsappMsg:msg||DEFAULT_WHATSAPP_MSG,apiUrl:DEFAULT_API_URL,valorPadrao:Number(vp)});setUrl(DEFAULT_API_URL);sT('Configurações salvas!')};
   return(<div><div className="page-header"><div><div className="page-title">Configurações</div><div className="page-subtitle">Mensagem do WhatsApp, sincronização e valores</div></div></div>
     <div className="grid-2">
       <div className="card" style={{padding:24}}>
@@ -466,7 +502,7 @@ function Config({cfg,setCfg,sT,forceSync,syncSt}){
         <div style={{padding:14,background:syncSt==='synced'?'var(--gnd)':syncSt==='error'?'var(--rdd)':'var(--sf)',borderRadius:10,marginBottom:16,fontSize:'.82rem'}}>
           <strong>Status:</strong> {syncSt==='synced'?'✅ Conectado e sincronizado':syncSt==='syncing'?'⏳ Sincronizando...':'❌ Erro na conexão'}
         </div>
-        <div className="form-group"><label>URL do Google Apps Script</label><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"/></div><div style={{fontSize:'.74rem',color:'var(--tx2)',marginTop:-4,marginBottom:12}}>Essa URL já vai preenchida no CRM para funcionar em qualquer navegador. Só altere se publicar uma nova implantação do Apps Script.</div>
+        <div className="form-group"><label>URL do Google Apps Script</label><input value={url} readOnly placeholder="https://script.google.com/macros/s/.../exec"/></div><div style={{fontSize:'.72rem',color:'var(--tx3)',marginTop:-6,marginBottom:10}}>Esta versão usa a URL fixa do backend para abrir igual em qualquer navegador.</div><div style={{fontSize:'.74rem',color:'var(--tx2)',marginTop:-4,marginBottom:12}}>Essa URL já vai preenchida no CRM para funcionar em qualquer navegador. Só altere se publicar uma nova implantação do Apps Script.</div>
         <div style={{display:'flex',gap:8,marginTop:8}}><button className="btn btn-gold" onClick={salvar}>Salvar URL</button><button className="btn btn-outline" onClick={forceSync}>Sincronizar Agora</button></div>
         <div style={{marginTop:20,padding:16,background:'var(--gdd)',borderRadius:10,fontSize:'.78rem',color:'var(--nv)'}}>
           <strong style={{color:'var(--gd)'}}>Como configurar:</strong><br/><br/>
