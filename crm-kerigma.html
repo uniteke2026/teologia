@@ -155,7 +155,7 @@ function wR(){const d=new Date(),s=new Date(d);s.setDate(d.getDate()-d.getDay())
 function mN(){return new Date().toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}
 function getPrimeiroNome(nome){return String(nome||'').trim().split(/\s+/)[0]||''}
 function personalizarMensagem(msg,lead){const primeiroNome=getPrimeiroNome(lead?.nome);return String(msg||'').replace(/\{\{\s*primeiroNome\s*\}\}/gi,primeiroNome)}
-const DEFAULT_API_URL='https://script.google.com/macros/s/AKfycby6EmvZ7Izwupvm6CbPs6mFFnlHGmbN3yRLtN8S2KVh7NmPhvShx8VJ_i2oU1wUzlGejw/exec';
+const DEFAULT_API_URL='https://script.google.com/macros/s/AKfycbwPWJmRCURNKlaR87EbVCNKZmplnKPOI6iOBGri9IhIGI6Ym7Xtuz_MuFqm_H86ckj3Sw/exec';
 const DEFAULT_WHATSAPP_MSG='Olá, {{primeiroNome}}! Sou da Universidade Teológica Kerigma. Gostaria de conversar sobre nossa formação teológica. Posso te ajudar?';
 
 // ========= SYNC ENGINE =========
