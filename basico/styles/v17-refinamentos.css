@@ -1,0 +1,427 @@
+/* V1.7 — refinamentos aprovados sobre a V1.6. Layout, ordem, textos e fotos inalterados. */
+
+/* 1. Degradê do título sem cortar a última letra. */
+.hero .hero-copy h1 em {
+  padding-right: .08em;
+  margin-right: -.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 3. Faixa do topo em uma linha no celular. */
+@media (max-width: 700px) {
+  .topbar {
+    padding: 9px 8px;
+    font-size: 9px;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 360px) {
+  .topbar { padding-inline: 4px; font-size: 8px; letter-spacing: .025em; }
+}
+
+/* 4 e 5. Paleta exclusivamente branca/azul e contraste reforçado. */
+.list div::before,
+.plus,
+.audience div::before { color: #2c5f95; }
+.teacher .title-role,
+.module-meta span,
+.price-grid .pitch .saving { color: #315d8d; }
+.offer-inline del,
+.price-card del { color: #52657b; }
+.tiny,
+.hero-copy .tiny,
+.railfoot p,
+.gallery figcaption,
+.screen-stage .label { color: #4a5d73; }
+.dark .eyebrow { color: #20466f; }
+
+/* Atmosfera editorial: luz difusa, malhas azuis e textura óptica quase imperceptível. */
+.lp-v16 {
+  --lp-ink: #10284e;
+  --lp-blue: #315d8d;
+  --lp-line: #d6e4f1;
+  --lp-shadow: 0 12px 34px rgb(16 40 78 / 7%);
+  background: #fff;
+}
+body {
+  background-color: #fff;
+  background-image: linear-gradient(180deg, #fff 0%, #fbfdff 48%, #fff 100%);
+}
+.hero {
+  background:
+    radial-gradient(ellipse 62% 65% at 84% 39%, rgb(195 220 242 / 48%) 0%, transparent 72%),
+    radial-gradient(ellipse 48% 50% at 5% 8%, rgb(232 242 251 / 70%) 0%, transparent 75%),
+    linear-gradient(180deg, #fff 0%, #fbfdff 72%, #fff 100%);
+}
+.hero::before {
+  background:
+    radial-gradient(ellipse 38% 43% at 76% 43%, rgb(138 181 220 / 17%) 0%, transparent 76%),
+    radial-gradient(ellipse 35% 30% at 24% 60%, rgb(219 234 247 / 32%) 0%, transparent 75%);
+  filter: none;
+  mask-image: linear-gradient(to bottom, transparent 2%, #000 19%, #000 68%, transparent 96%);
+}
+.section::after {
+  background:
+    radial-gradient(ellipse 48% 65% at 88% 35%, rgb(215 232 247 / 34%) 0%, transparent 72%),
+    radial-gradient(ellipse 38% 52% at 6% 78%, rgb(237 245 252 / 52%) 0%, transparent 78%);
+  filter: none;
+  opacity: .9;
+}
+.section:nth-of-type(even)::after {
+  background:
+    radial-gradient(ellipse 46% 62% at 8% 28%, rgb(215 232 247 / 32%) 0%, transparent 74%),
+    radial-gradient(ellipse 36% 48% at 92% 82%, rgb(237 245 252 / 48%) 0%, transparent 78%);
+}
+.features::after,
+.modules::after,
+.cert::after {
+  background:
+    radial-gradient(ellipse 48% 70% at 12% 42%, rgb(205 227 245 / 38%) 0%, transparent 72%),
+    radial-gradient(ellipse 32% 45% at 88% 10%, rgb(237 245 252 / 58%) 0%, transparent 78%);
+}
+.section + .section > .wrap::before {
+  background: linear-gradient(90deg, transparent, #d5e3f0 18%, #e5eef7 82%, transparent);
+}
+.pricing::before {
+  background:
+    radial-gradient(ellipse 46% 70% at 77% 48%, rgb(188 216 240 / 32%) 0%, transparent 73%),
+    radial-gradient(ellipse 35% 55% at 12% 75%, rgb(230 241 250 / 48%) 0%, transparent 75%);
+  filter: none;
+}
+
+/* 2. Barra fixa do celular somente quando útil. */
+@media (max-width: 700px) {
+  .mobilebar {
+    transform: translateY(110%);
+    transition: transform .35s cubic-bezier(.2, .7, .2, 1);
+  }
+  .mobilebar.show { transform: none; }
+}
+
+/* Hero cinematográfico: a fotografia original se dissolve no branco, sem cartão ou retoque. */
+.hero .photo-hero {
+  background: radial-gradient(ellipse 62% 65% at 65% 45%, rgb(191 216 238 / 32%) 0%, transparent 76%);
+}
+.hero .photo-hero img {
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 28%, #000 93%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 13%, #000 68%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 28%, #000 93%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 13%, #000 68%, transparent 100%);
+  -webkit-mask-composite: source-in;
+}
+.hero .photo-caption {
+  text-shadow: 0 1px 14px rgb(255 255 255 / 85%);
+}
+.hero .photo-caption strong { color: var(--lp-ink); }
+.hero .photo-caption span { color: #425b77; }
+
+/* 9. Entrada escalonada dos cartões. */
+.animate .bento.reveal:not(.visible) .tile,
+.animate .experience-meta.reveal:not(.visible) > div {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.bento.visible .tile,
+.experience-meta.visible > div {
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+.bento.visible .tile:nth-child(2),
+.experience-meta.visible > div:nth-child(2) { transition-delay: .06s; }
+.bento.visible .tile:nth-child(3),
+.experience-meta.visible > div:nth-child(3) { transition-delay: .12s; }
+.bento.visible .tile:nth-child(4) { transition-delay: .18s; }
+.bento.visible .tile:nth-child(5) { transition-delay: .24s; }
+.bento.visible .tile:nth-child(6) { transition-delay: .3s; }
+.bento.visible .tile:nth-child(7) { transition-delay: .36s; }
+.reveal.visible { transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+
+/* Bento premium: contorno em degradê, luz de superfície e resposta discreta. */
+.tile,
+.tile.primary,
+.tile.secondary {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  outline: 0;
+  background:
+    linear-gradient(145deg, #fff 0%, #f4f8fd 100%) padding-box,
+    linear-gradient(135deg, rgb(255 255 255 / 95%) 0%, #bfd4e8 48%, #e7f0f8 100%) border-box;
+  box-shadow: 0 1px 1px rgb(16 40 78 / 2%), var(--lp-shadow), inset 0 1px 0 rgb(255 255 255 / 90%);
+  transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s ease;
+}
+.tile.primary {
+  background:
+    linear-gradient(145deg, #fff 0%, #eaf3fb 100%) padding-box,
+    linear-gradient(125deg, #fff 0%, #a9c7e2 52%, #e3eef8 100%) border-box;
+}
+.tile.secondary {
+  background:
+    linear-gradient(145deg, #fdfeff 0%, #edf5fc 100%) padding-box,
+    linear-gradient(135deg, #fff 0%, #c4d9eb 55%, #e7f0f8 100%) border-box;
+}
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 0%, rgb(255 255 255 / 92%) 0%, transparent 72%),
+    repeating-linear-gradient(118deg, rgb(23 59 107 / 1.8%) 0 1px, transparent 1px 8px);
+  opacity: .62;
+  transition: opacity .35s ease;
+}
+.tile > * { position: relative; z-index: 1; }
+.tile.primary::after { z-index: 0; color: rgb(58 110 168 / 9%); }
+.tile .tag,
+.tile.primary .tag { color: #426485; }
+.devices span {
+  border-color: #c7d9e9;
+  background: rgb(255 255 255 / 72%);
+  transition: border-color .25s ease, background-color .25s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 2px 2px rgb(16 40 78 / 2%), 0 18px 40px rgb(16 40 78 / 10%), inset 0 1px 0 #fff;
+  }
+  .tile:hover::before { opacity: .95; }
+  .tile:hover .devices span { border-color: #a9c5de; background-color: #fff; }
+}
+
+/* 10. Carrosséis e vitrine editorial das 12 capas originais. */
+.rail {
+  padding: 6px 2px 22px;
+  scroll-padding-inline: 2px;
+  scrollbar-color: #b8cbde transparent;
+}
+.rail.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.rail.dragging img { pointer-events: none; }
+@media (hover: hover) { .rail { cursor: grab; } }
+.round:disabled { opacity: .35; cursor: default; pointer-events: none; }
+.rail-dots { display: none; }
+.module {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, #fff 0%, #f9fcff 100%) padding-box,
+    linear-gradient(145deg, #edf5fc 0%, #bdd2e5 55%, #e6eff7 100%) border-box;
+  box-shadow: 0 10px 28px rgb(16 40 78 / 7%);
+  transition: transform .4s cubic-bezier(.2, .7, .2, 1), box-shadow .4s ease;
+}
+.module-img {
+  position: relative;
+  isolation: isolate;
+  perspective: 900px;
+  background:
+    radial-gradient(ellipse 76% 70% at 35% 16%, #fff 0%, transparent 72%),
+    radial-gradient(ellipse 85% 65% at 80% 85%, #caddeb 0%, transparent 76%),
+    linear-gradient(145deg, #f4f8fc 0%, #dce9f4 100%);
+}
+.module-img::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 18%;
+  right: 12%;
+  bottom: 1%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(16 40 78 / 22%) 0%, transparent 70%);
+  transform: rotate(-3deg);
+}
+.module-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(118deg, rgb(23 59 107 / 1.5%) 0 1px, transparent 1px 9px);
+}
+.module-img img {
+  position: relative;
+  z-index: 1;
+  width: 88%;
+  max-width: 238px;
+  transform: rotate(-2.4deg) translateY(9px);
+  transform-origin: 50% 100%;
+  box-shadow: 12px 17px 25px rgb(16 40 78 / 24%), -1px 0 0 rgb(255 255 255 / 65%);
+  transition: transform .45s cubic-bezier(.2, .7, .2, 1), box-shadow .45s ease;
+}
+.module-meta {
+  position: relative;
+  border-top: 1px solid rgb(201 220 237 / 62%);
+  background: rgb(255 255 255 / 72%);
+}
+.module-meta span { color: #2d5b8e; }
+@media (hover: hover) and (pointer: fine) {
+  .module:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 38px rgb(16 40 78 / 11%);
+  }
+  .module:hover img {
+    transform: rotate(-.4deg) translateY(2px) scale(1.015);
+    box-shadow: 10px 20px 30px rgb(16 40 78 / 25%), -1px 0 0 rgb(255 255 255 / 65%);
+  }
+}
+.modules .railfoot { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+.modules .railfoot .tiny { justify-self: end; white-space: nowrap; }
+@media (max-width: 700px) {
+  .rail { grid-auto-columns: 74%; }
+  .gallery,
+  .reviews { grid-auto-columns: 82%; }
+  .rail-dots {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+    min-height: 8px;
+    margin-top: 5px;
+  }
+  .rail-dots i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #c9d8e7;
+    transition: background .2s, width .2s;
+  }
+  .rail-dots i.on { width: 14px; border-radius: 3px; background: #173b6b; }
+  .module-img img { width: 86%; }
+}
+@media (max-width: 360px) {
+  .railhead { display: block; position: relative; }
+  .railhead .controls { position: absolute; top: 0; right: 0; }
+  .railhead .eyebrow { max-width: calc(100% - 88px); }
+  .price-grid > * { min-width: 0; }
+  .price-card .amount { font-size: 17vw; }
+}
+
+/* Mockups responsivos: notebook e smartphone usam somente a captura original. */
+.screen-stage {
+  min-height: 540px;
+  padding: 62px 8% 82px;
+  overflow: hidden;
+  border: 1px solid #d1e1ee;
+  background:
+    radial-gradient(ellipse 65% 70% at 28% 8%, #fff 0%, transparent 70%),
+    radial-gradient(ellipse 55% 65% at 88% 72%, rgb(185 213 237 / 64%) 0%, transparent 75%),
+    repeating-linear-gradient(118deg, rgb(23 59 107 / 1.2%) 0 1px, transparent 1px 10px),
+    linear-gradient(145deg, #f7fbff 0%, #e2edf7 100%);
+  box-shadow: inset 0 1px 0 #fff, 0 14px 38px rgb(16 40 78 / 8%);
+}
+.laptop {
+  z-index: 2;
+  width: min(850px, 91%);
+  margin-right: 5%;
+  border: 1px solid #263b52;
+  background: linear-gradient(145deg, #172536 0%, #080d14 72%);
+  box-shadow: 0 26px 48px rgb(16 40 78 / 28%), 0 2px 0 rgb(255 255 255 / 30%) inset;
+}
+.laptop::after {
+  background: linear-gradient(180deg, #d7e0e9 0%, #8797a8 58%, #596b80 100%);
+  box-shadow: 0 8px 14px rgb(16 40 78 / 16%);
+}
+.screen-stage .phone {
+  position: absolute;
+  z-index: 3;
+  right: 7%;
+  bottom: 66px;
+  width: clamp(112px, 13vw, 168px);
+  aspect-ratio: 9 / 18.6;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid #4f657d;
+  border-radius: 27px;
+  background: linear-gradient(145deg, #253a52 0%, #08111d 68%);
+  box-shadow: 0 22px 35px rgb(16 40 78 / 30%), inset 0 1px 0 rgb(255 255 255 / 36%);
+  transform: rotate(2deg);
+}
+.screen-stage .phone::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 11px;
+  left: 50%;
+  width: 28%;
+  height: 5px;
+  border-radius: 10px;
+  background: #0a1523;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 12%);
+}
+.screen-stage .phone img {
+  width: 100%;
+  height: 100%;
+  border-radius: 19px;
+  object-fit: cover;
+  object-position: left center;
+}
+.screen-stage .label { z-index: 4; color: #425b77; }
+.experience-meta div { border-color: #d3e1ed; }
+@media (max-width: 1000px) {
+  .screen-stage { min-height: 430px; }
+  .screen-stage .phone { right: 6%; bottom: 60px; }
+}
+@media (max-width: 700px) {
+  .screen-stage {
+    min-height: 250px;
+    aspect-ratio: auto;
+    padding: 42px 4% 56px;
+  }
+  .laptop { width: 94%; margin-right: 8%; }
+  .screen-stage .phone {
+    right: 5%;
+    bottom: 45px;
+    width: 78px;
+    padding: 4px;
+    border-radius: 16px;
+    transform: rotate(2deg);
+  }
+  .screen-stage .phone::before { top: 7px; height: 3px; }
+  .screen-stage .phone img { border-radius: 11px; }
+  .screen-stage .label { right: 12px; max-width: 70%; line-height: 1.35; }
+}
+
+/* 11 e 12. Botões, foco e FAQ. */
+.btn:active { transform: translateY(0) scale(.985); filter: brightness(.97); }
+.round:active { transform: scale(.94); }
+.btn:focus-visible,
+.round:focus-visible,
+summary:focus-visible,
+.rail:focus-visible {
+  outline: 3px solid #4f8fcb;
+  outline-offset: 3px;
+}
+summary:hover { color: #173b6b; }
+:root { interpolate-size: allow-keywords; }
+details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size .32s ease, content-visibility .32s allow-discrete;
+}
+details[open]::details-content { block-size: auto; }
+.railfoot .tiny { white-space: nowrap; }
+
+/* Movimento reduzido: conteúdo e navegação continuam disponíveis sem animação. */
+@media (prefers-reduced-motion: reduce) {
+  .mobilebar { transition: none; }
+  .animate .bento.reveal:not(.visible) .tile,
+  .animate .experience-meta.reveal:not(.visible) > div { opacity: 1; transform: none; }
+  details::details-content { transition: none; }
+  .tile:hover,
+  .module:hover,
+  .module:hover img,
+  .btn:hover { transform: none; }
+  .rail-dots i { transition: none; }
+}
