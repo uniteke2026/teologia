@@ -1,0 +1,3 @@
+project_id = "mlnwcpbeqianfnymfvsh"
+[functions.connect]
+verify_jwt = false
