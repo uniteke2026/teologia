@@ -64,21 +64,21 @@
       /* Public directory only: preserve the individual listing, filters and forms. */
       #vitrine .grid[aria-live="polite"],
       #vitrine .grid[aria-label="Carregando anúncios"] {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
         align-items: stretch;
       }
       @media (min-width: 640px) {
         #vitrine .grid[aria-live="polite"],
         #vitrine .grid[aria-label="Carregando anúncios"] {
-          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 12px;
         }
       }
       @media (min-width: 1024px) {
         #vitrine .grid[aria-live="polite"],
         #vitrine .grid[aria-label="Carregando anúncios"] {
-          grid-template-columns: repeat(5, minmax(0, 1fr));
+          grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 14px;
         }
       }
@@ -122,20 +122,20 @@
       }
       @media (max-width: 639px) {
         #vitrine .grid[aria-live="polite"],
-        #vitrine .grid[aria-label="Carregando anúncios"] { gap: 6px; }
+        #vitrine .grid[aria-label="Carregando anúncios"] { gap: 10px; }
         #vitrine .grid[aria-live="polite"] > article { border-radius: 8px; }
         #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) {
-          padding: 6px;
-          gap: 7px;
+          padding: 9px;
+          gap: 8px;
         }
         #vitrine .grid[aria-live="polite"] > article h3 {
-          font-size: 12px;
+          font-size: 14px;
           line-height: 1.2;
         }
         #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) p,
         #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) dl,
         #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) span {
-          font-size: 10px;
+          font-size: 11px;
           line-height: 1.35;
         }
         #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) dl {
@@ -195,6 +195,19 @@
           margin-top: 4px;
         }
         #vitrine .grid[aria-live="polite"] > article .story-cover-surface > div:last-child { padding-top: 4px; }
+      }
+      /* Keep action labels intact at every directory width. */
+      #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child a,
+      #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child button {
+        flex-shrink: 0;
+        overflow-wrap: normal;
+        word-break: normal;
+        white-space: nowrap;
+      }
+      #vitrine .grid[aria-live="polite"] > article a[href*="wa.me"],
+      #vitrine .grid[aria-live="polite"] > article a[href*="api.whatsapp.com"] {
+        flex: 0 0 100%;
+        width: 100%;
       }
     </style>
   </head>
