@@ -60,6 +60,143 @@
     <link rel="icon" href="/connect/favicon.png" type="image/png" />
     <script type="module" crossorigin src="/connect/assets/index-DZ1Kcnpx.js"></script>
     <link rel="stylesheet" crossorigin href="/connect/assets/index-VS0XQkS4.css">
+    <style id="connect-compact-directory">
+      /* Public directory only: preserve the individual listing, filters and forms. */
+      #vitrine .grid[aria-live="polite"],
+      #vitrine .grid[aria-label="Carregando anúncios"] {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        align-items: stretch;
+      }
+      @media (min-width: 640px) {
+        #vitrine .grid[aria-live="polite"],
+        #vitrine .grid[aria-label="Carregando anúncios"] {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px;
+        }
+      }
+      @media (min-width: 1024px) {
+        #vitrine .grid[aria-live="polite"],
+        #vitrine .grid[aria-label="Carregando anúncios"] {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 14px;
+        }
+      }
+      #vitrine .grid[aria-live="polite"] > article {
+        min-width: 0;
+        border-radius: 12px;
+        overflow-wrap: anywhere;
+      }
+      #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) {
+        padding: 12px;
+        gap: 10px;
+      }
+      #vitrine .grid[aria-live="polite"] > article h3 {
+        font-size: 16px;
+        line-height: 1.2;
+      }
+      #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > p {
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child a,
+      #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child button {
+        min-width: 0;
+        max-width: 100%;
+        padding-inline: 8px;
+        gap: 4px;
+        white-space: normal;
+        text-align: center;
+      }
+      #vitrine .grid[aria-label="Carregando anúncios"] > div {
+        min-width: 0;
+        border-radius: 12px;
+      }
+      #vitrine .grid[aria-label="Carregando anúncios"] > div > div:nth-child(2) {
+        min-width: 0;
+        padding: 10px;
+        overflow: hidden;
+      }
+      #vitrine .grid[aria-label="Carregando anúncios"] > div > div:nth-child(2) * {
+        max-width: 100%;
+      }
+      @media (max-width: 639px) {
+        #vitrine .grid[aria-live="polite"],
+        #vitrine .grid[aria-label="Carregando anúncios"] { gap: 6px; }
+        #vitrine .grid[aria-live="polite"] > article { border-radius: 8px; }
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) {
+          padding: 6px;
+          gap: 7px;
+        }
+        #vitrine .grid[aria-live="polite"] > article h3 {
+          font-size: 12px;
+          line-height: 1.2;
+        }
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) p,
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) dl,
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) span {
+          font-size: 10px;
+          line-height: 1.35;
+        }
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) dl {
+          padding: 5px;
+          border-radius: 6px;
+        }
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child {
+          padding-top: 7px;
+        }
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child a,
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child button {
+          width: 100%;
+          min-height: 34px;
+          height: auto;
+          padding: 4px 2px;
+          border-radius: 6px;
+          font-size: 10px;
+        }
+        #vitrine .grid[aria-live="polite"] > article > div:nth-child(2) > div:last-child svg {
+          width: 12px;
+          height: 12px;
+          flex-shrink: 0;
+        }
+        #vitrine .grid[aria-live="polite"] > article [aria-label="Foto anterior"],
+        #vitrine .grid[aria-live="polite"] > article [aria-label="Próxima foto"] {
+          width: 24px;
+          height: 28px;
+        }
+        #vitrine .grid[aria-live="polite"] > article [aria-label="Foto anterior"] { left: 3px; }
+        #vitrine .grid[aria-live="polite"] > article [aria-label="Próxima foto"] { right: 3px; }
+        #vitrine .grid[aria-live="polite"] > article [role="tablist"] { left: 4px; right: 4px; gap: 2px; }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface {
+          padding: 7px;
+          gap: 4px;
+        }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface > div:first-child {
+          flex-wrap: wrap;
+          gap: 3px;
+        }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface p {
+          font-size: 10px;
+          line-height: 1.2;
+        }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface span {
+          font-size: 7px;
+          padding-inline: 3px;
+          letter-spacing: .04em;
+        }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface [aria-hidden="true"] {
+          width: 26px;
+          height: 26px;
+          font-size: 13px;
+          border-radius: 6px;
+        }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface > div:nth-child(2) > * + *,
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface > div:nth-child(2) > div > * + * {
+          margin-top: 4px;
+        }
+        #vitrine .grid[aria-live="polite"] > article .story-cover-surface > div:last-child { padding-top: 4px; }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
