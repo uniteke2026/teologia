@@ -36,7 +36,7 @@ const KCHGroups=[
 ["Marketing","marketing publicidade propaganda anuncios trafego social media divulgacao branding design comunicacao"],
 ["Beleza e estética","cabelo cabeleireiro cabeleireira salao barbearia corte penteado beleza estetica unha manicure"],
 ["Gestão","gestao administracao administrar gerenciamento estrategia consultoria consultor consultorias mentoria mentorias treinamento treinamentos empresarial empresarios gestores lideranca processos"],
-["Saúde e bem-estar","nutricao nutricionista dieta emagrecer emagrecimento saude bem estar alimentacao saudavel"],
+["Saúde e bem-estar","nutricao nutricionista dieta emagrecer emagrecimento saude nutricional nutricionais saudavel"],
 ["Alimentação","comida restaurante cafe cafeteria cappuccino cappuccinos lanche refeicao bebida padaria"],
 ["Construção e reformas","obra reforma pedreiro pintor pintura eletricista encanador manutencao construcao"],
 ["Transporte","transporte frete fretes motorista locacao veiculo veiculos uber carreto mudanca"],
